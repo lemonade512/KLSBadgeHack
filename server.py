@@ -1,4 +1,4 @@
-#!/python
+#!/usr/bin/env python
 
 from bottle import Bottle, route, run, static_file, template
 from bottle import request, response, abort, error, HTTPResponse
