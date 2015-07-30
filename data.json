@@ -28,7 +28,7 @@
   },
   "students" : {
     "imran" : {
-      "delted": false,
+      "deleted": false,
       "can-signin" : false,
       "can-signout" : false,
       "adult" : "vishesh",
