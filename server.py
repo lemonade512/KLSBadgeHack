@@ -13,17 +13,16 @@ data = {}
 def load_data():
     global data
     data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
-    print(data)
-    data['students'] = {s['name']:lambda s: m.Student(**s) for s in data['students']}
-    data['users'] = map(lambda u: m.User(**u), data['users'])
+    data['students'] = {s['name']:m.Student(**s) for s in data['students']}
+    data['users'] = {u['name']:m.User(**u) for u in data['users']}
     data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
 
 def save_data():
     json.dump(t.itemmap(lambda i: (i[0], map(lambda u: u.json, i[1])), data),
               open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
 
-
 load_data()
+print data
 app = Bottle()
 
 # ------------------------------ UTILITIES --------------------------------
@@ -189,7 +188,8 @@ def index():
 @app.get('/adults')
 def get_adults():
     load_data()
-    return t.valfilter(lambda v: not v.deleted, data['users'])
+    return {k:v.json for k,v in
+            t.valfilter(lambda v: not v.deleted, data['users']).iteritems()}
 
 @app.delete('/adults')
 @params(keys=['username'])
@@ -201,7 +201,7 @@ def delete_adult(p):
 @params(keys=['username', 'params'])
 def update_adult(p):
     print "Updating {}".format(p['username'])
-    print "%s = %s" % (p['username'], p['params'])
+    print "{} = {}".format(p['username'], p['params'])
 
 @app.post('/adults')
 @params(keys=['username'])
@@ -224,7 +224,7 @@ def delete_student(p):
 @params(keys=['username', 'params'])
 def update_student(p):
     print "Updating {}".format(p['username'])
-    print "%s = %s" %(p['username'], p['params'])
+    print "{} = {}".format(p['username'], p['params'])
     data['students'][p['username']] = p['params']
     save_data()
 
