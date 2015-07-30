@@ -4,6 +4,7 @@
 <table>
     <tr>
         <th>Name</th>
+        <th>ID</th>
         <th>Can Signin</th>
         <th>Can Signout</th>
         <th>Authorized Signers</th>
@@ -12,6 +13,7 @@
     </tr>
     <tr ng-repeat="(name, student) in students">
         <td> {{ name }} </td>
+        <td> {{ student.id }} </td>
         <td> <input type="checkbox" ng-model=student['can-signin'] /> </td>
         <td> <input type="checkbox" ng-model=student['can-signout'] /> </td>
         <td>
@@ -27,20 +29,22 @@
 </table>
 <button ng-click="create_student()"> Create </button>
 
-<h2>Adults</h2>
+<h2>Users</h2>
 <table>
     <tr>
         <th>Name</th>
-        <th>Students</th>
+        <th>ID</th>
+        <th>Permissions</th>
         <th></th>
         <th></th>
     </tr>
-    <tr ng-repeat="(name, adult) in adults">
+    <tr ng-repeat="(name, user) in users">
         <td>{{ name }}</td>
-        <td>{{ adult.students }}</td>
-        <td><button class="btn" ng-click="delete_adult(name)" type="button"> Delete </button></td>
-        <td><button class="btn" ng-click="update_adult(name)" type="button"> Update </button></td>
+        <td>{{ user.id }}</td>
+        <td>{{ user.permissions }}</td>
+        <td><button class="btn" ng-click="delete_user(name)" type="button"> Delete </button></td>
+        <td><button class="btn" ng-click="update_user(name)" type="button"> Update </button></td>
     </tr>
 </table>
-<button ng-click="create_adult()" type="button"> Create </button>
+<button ng-click="create_user()" type="button"> Create </button>
 
