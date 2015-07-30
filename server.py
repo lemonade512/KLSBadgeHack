@@ -22,7 +22,6 @@ def save_data():
               open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
 
 load_data()
-print data
 app = Bottle()
 
 # ------------------------------ UTILITIES --------------------------------
@@ -187,38 +186,25 @@ def index():
 
 @app.get('/adults')
 def get_adults():
-    load_data()
     return {k:v.json for k,v in
             t.valfilter(lambda v: not v.deleted, data['users']).iteritems()}
 
-@app.delete('/adults')
-@params(keys=['username'])
-def delete_adult(p):
-    data['adults'][p['username']]['deleted'] = True
-    save_data()
-
 @app.put('/adults')
-@params(keys=['username', 'params'])
+@params(keys=['user'])
 def update_adult(p):
-    print "Updating {}".format(p['username'])
-    print "{} = {}".format(p['username'], p['params'])
+    data['users'][p['user']['name']] = User(**p['user'])
 
 @app.post('/adults')
 @params(keys=['username'])
 def create_adult(p):
     print "Creating {}".format(p['username'])
 
+
 @app.get('/students')
 def get_students():
     load_data()
-    return t.valfilter(lambda v: not v['deleted'], data['students'])
-
-@app.delete('/students')
-@params(keys=['username'])
-def delete_student(p):
-    print "Deleting {}".format(p['username'])
-    data['students'][p['username']]['deleted'] = True
-    save_data()
+    return {k:v.json for k,v in
+            t.valfilter(lambda v: not v.deleted, data['students']).iteritems()}
 
 @app.put('/students')
 @params(keys=['username', 'params'])

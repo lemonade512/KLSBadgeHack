@@ -25,12 +25,12 @@ class Student(object):
 
         self._name = name
         self._id = id
+        self._deleted = deleted
         self.authorized = authorized
         self._can_signin = can_signin
         self._can_signout = can_signout
         self._in_class = in_class
         self.absences = absences
-        self._deleted = deleted
 
     def __repr__(self):
         return 'Student(name={},id={},can_signin={},can_signout={},in_class={},authorized={},absences={}'.format(
@@ -65,19 +65,19 @@ class Student(object):
         return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
 
     @can_signin.setter
-    def set_can_signin(self,b):
+    def can_signin(self,b):
         self._can_signin = b
 
     @can_signout.setter
-    def set_can_signout(self,b):
+    def can_signout(self,b):
         self._can_signout = b
 
     @in_class.setter
-    def set_in_class(self,b):
+    def in_class(self,b):
         self._in_class = b
 
     @deleted.setter
-    def set_deleted(self,b):
+    def deleted(self,b):
         self._deleted = b
 
     def add_authorized(self,user):
@@ -115,8 +115,8 @@ class User(object):
         self._permissions = permissions
 
     def __repr__(self):
-        return 'User(name={},id={},permissions={})'.format(
-            self.name, self.id, self.permissions)
+        return 'User(name={},id={},permissions={},deleted={})'.format(
+            self.name, self.id, self.permissions, self.deleted)
 
     @property
     def json(self):
@@ -135,7 +135,7 @@ class User(object):
         return self._deleted
 
     @deleted.setter
-    def set_deleted(self, b):
+    def deleted(self, b):
         self._deleted = b
 
     @property
@@ -155,10 +155,6 @@ class Interaction(nt('Interaction',
     @property
     def json(self):
         return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
-
-
-
-
 
 
 

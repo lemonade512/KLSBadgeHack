@@ -1,18 +1,19 @@
 {
-  "students": [], 
+  "students": [
+  ],
   "users": [
     {
-      "deleted": false, 
-      "id": 123912930123, 
-      "name": "vishesh", 
+      "deleted": false,
+      "id": 123912930123,
+      "name": "vishesh",
       "permissions": []
-    }, 
+    },
     {
-      "deleted": false, 
-      "id": 1239123981, 
-      "name": "phillip", 
+      "deleted": false,
+      "id": 1239123981,
+      "name": "phillip",
       "permissions": []
     }
-  ], 
+  ],
   "interactions": []
 }
