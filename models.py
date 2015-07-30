@@ -20,17 +20,17 @@ class Student(object):
     def __init__(self, name, id,
                  authorized=None, can_signin=True, can_signout=False,
                  in_class=False, absences=None, deleted=False):
-        if authorized is None: authorized = set()
-        if absences is None: absences = set()
+        if authorized is None: authorized = []
+        if absences is None: absences = []
 
         self._name = name
         self._id = id
         self._deleted = deleted
-        self.authorized = authorized
+        self._authorized = authorized
         self._can_signin = can_signin
         self._can_signout = can_signout
         self._in_class = in_class
-        self.absences = absences
+        self._absences = absences
 
     def __repr__(self):
         return 'Student(name={},id={},can_signin={},can_signout={},in_class={},authorized={},absences={}'.format(
@@ -61,6 +61,14 @@ class Student(object):
         return self._in_class
 
     @property
+    def authorized(self):
+        return self._authorized
+
+    @property
+    def absences(self):
+        return self._absences
+
+    @property
     def json(self):
         return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
 
@@ -82,16 +90,19 @@ class Student(object):
 
     def add_authorized(self,user):
         l = len(self.authorized)
-        self.authorized.add(user)
-        if len(self.authorized) > l:
+        self._authorized.append(user)
+        if len(self._authorized) > l:
             return True
         return False
+
+    def remove_authorized(self, user):
+        self._authorized.remove(user)
 
     def add_absence(self,a):
         if isinstance(a,str):
             #will raise valueerror if a is not what is expected.
             parse_date(a)
-            self.absences.add(a)
+            self._absences.append(a)
 
         elif isinstance(a,list):
             if len(a) is not 2:
@@ -99,10 +110,12 @@ class Student(object):
             parse_date(a[0])
             parse_date(a[1])
 
-            self.absences.update(set(date_range(*a)))
+            self._absences.extend(date_range(*a))
 
         else:
             raise ValueError('Should be passing in either string date or an interval.')
+
+    def remove_absence(self,a):
 
 
 class User(object):

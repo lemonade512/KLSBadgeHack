@@ -8,6 +8,7 @@ import cytoolz as t
 import cytoolz.curried as tc
 import os.path
 import models as m
+import datetime
 
 data = {}
 def load_data():
@@ -140,6 +141,12 @@ multipairs=lambda d: list(t.concat(t.map(
                                                 else (k,v))(i[0],i[1]),
                       d.items())))
 
+# t.groupby(lambda s: 'present' if s[1] else '' if s[2] else 2,
+#   [[s.name,
+#     s.in_class,
+#     datetime.datetime.today().strftime("%Y-%m-%d") in s.absences]
+#  for s in data['students'].values()])
+
 # --------------------------------- REST API -------------------------------
 
 @app.get('/')
@@ -174,7 +181,7 @@ def index():
 
 @app.get('/whosinclass')
 def whosinclass():
-    return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
+    return
 
 @app.get('/fulldatadump')
 @params(opts={'password':None})

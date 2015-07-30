@@ -9,6 +9,13 @@ angular.module('klssignin', ['ngRoute'])
       templateUrl:'templates/admin_user_dashboard.html',
       controller: 'AdminUserDashCtrl'
   })
+  .when('/whosinclass', {
+      templateUrl:'templates/whosinclass.html',
+      controller: 'WhosInClassCtrl'
+  })
+  .otherwise({
+    redirectTo: '/'
+  })
   ;
 })
 .controller('MainCtrl', function($scope) {
@@ -42,6 +49,14 @@ angular.module('klssignin', ['ngRoute'])
     })
   }
 })
+
+.controller('WhosInClassCtrl', function($scope) {
+  $scope.students = {
+    present: ['phillip', 'vishesh'],
+    absent: ['tim', 'johnny'],
+    nothere: ['sarah']
+  };
+})
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
     $scope.adults = [];
     $http.get("/adults").success(function(data) {
@@ -71,8 +86,7 @@ angular.module('klssignin', ['ngRoute'])
 
     $scope.delete_student = function(student) {
         console.log("Deleting " + student);
-        $scope.students[student].deleted = true;
-        $http.put("/students", {"username": student, "params": $scope.students[student]}).success(function() {
+        $http.delete("/students", {params: {"username": student}}).success(function() {
             window.location.reload(false);
         });
     };

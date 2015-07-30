@@ -6,7 +6,7 @@
       "deleted": false,
       "can_signout": true,
       "in_class": false,
-      "authorized": "vishesh",
+      "authorized": ["vishesh"],
       "id": 123513,
       "name": "bob"
     },
@@ -16,7 +16,7 @@
       "deleted": false,
       "can_signout": true,
       "in_class": false,
-      "authorized": "vishesh",
+      "authorized": ["vishesh"],
       "id": 123512,
       "name": "george"
     }

@@ -6,11 +6,22 @@ html,body {
 }
 
 table {
-    width: 90%;
-    margin-left: 5%;
-    border: 1px solid black;
+  width: 90%;
+  margin-left: 5%;
+  text-align: center;
 }
 
 th {
-    border-bottom: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+
+.flex-row-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: true;
+}
+
+.flex-row-wrap * {
+  flex: 1;
 }
