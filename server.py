@@ -24,8 +24,9 @@ def reqinfo():
     """
     return {'path':request.path, 
             'method' : request.method,
-            'body': json.dumps({k:request.params[k] for k in request.params}) 
-                    if request.json == None else json.dumps(request.json)}
+            'body': {k:request.params[k] for k in request.params}
+                    if request.json == None 
+                    else {k:request.json[k] for k in request.json}}
 
 def jsonabort(status,message):
     """Usage: jsonabort(400, 'message') - works just like abort, but json.
@@ -128,15 +129,31 @@ multipairs=lambda d: list(t.concat(t.map(
 def index():
     return static_file('index.html', root="static/")
 
-@app.get('/login')
+@app.get('/signinout')
 @params(keys=['username'])
-def login(p):
+def signinout(p):
     """Find a user's children."""
-    if p['username'] not in data['users']:
+    if p['username'] in data['parents']:
+        return {'is-child': False, 'children': data['parents'][p['username']]['children']}
+    
+    elif p['username'] in data['children']:
+        child = data['children'][p['username']]
+        if child['in-class']:
+            if child['can-signout']:
+                # child will just sign themselves out
+                child['in-class'] = False
+                return {'is-child': True, 'in-class' : False}
+            else:
+                jsonabort(400, 'Student {} not authorized for self-signout'.format(p['username']))
+        else:
+            if child['can-signin']:
+                # child will sign themselves in
+                child['in-class'] = True
+                return {'is-child': True, 'in-class': True}
+            else:
+                jsonabort(400, 'Student {} not authorized for self-signin'.format(p['username']))
+    else:
         jsonabort(400, 'User {} does not exist'.format(p['username']))
-
-    if t.get(['users', p['username']]) == 'parent':
-        return {}
 
 # --------------------------- BASIC STATIC ROUTES
 

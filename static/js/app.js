@@ -11,8 +11,24 @@ angular.module('klssignin', ['ngRoute'])
 
 })
 .controller('SigninCtrl', function($scope, $http, $location) {
+  $scope.errorMessage = undefined;
+
   $scope.login = function(user) {
-    $http.get('/')
+    $http.get('/signinout', {
+      "params": {"username" : user.name}
+    })
+    .success(function(data,status) {
+      if (data['is-child']) {
+
+      }
+    }).error(function(data,status) {
+      // 500 errors aren't our problem.
+      if (status == 500) return;
+      // if it's a 400 error, display the message to the client.
+      if (status == 400) {
+        $scope.errorMessage = data.message;
+      }
+    })
   }
 })
 ;
