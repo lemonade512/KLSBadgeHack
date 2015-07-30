@@ -142,18 +142,22 @@ def signinout(p):
             if child['can-signout']:
                 # child will just sign themselves out
                 child['in-class'] = False
-                return {'is-child': True, 'in-class' : False}
+                return {'username': p['username'], 'is-child': True, 'in-class' : False}
             else:
                 jsonabort(400, 'Student {} not authorized for self-signout'.format(p['username']))
         else:
             if child['can-signin']:
                 # child will sign themselves in
                 child['in-class'] = True
-                return {'is-child': True, 'in-class': True}
+                return {'username': p['username'], 'is-child': True, 'in-class': True}
             else:
                 jsonabort(400, 'Student {} not authorized for self-signin'.format(p['username']))
     else:
         jsonabort(400, 'User {} does not exist'.format(p['username']))
+
+@app.get('/whosinclass')
+def whosinclass():
+    return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
 
 # --------------------------- BASIC STATIC ROUTES
 
@@ -184,6 +188,7 @@ def statictemplates(resource):
 
 #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 app.run(host='localhost', port=8080, debug=True, reloader=True)
+
 
 
 

@@ -12,6 +12,7 @@ angular.module('klssignin', ['ngRoute'])
 })
 .controller('SigninCtrl', function($scope, $http, $location) {
   $scope.errorMessage = undefined;
+  $scope.success = false;
 
   $scope.login = function(user) {
     $http.get('/signinout', {
@@ -19,8 +20,12 @@ angular.module('klssignin', ['ngRoute'])
     })
     .success(function(data,status) {
       if (data['is-child']) {
-
+        $scope.student = {
+          username: data['username'],
+          inClass: data['in-class']
+        };
       }
+      $scope.success = true;
     }).error(function(data,status) {
       // 500 errors aren't our problem.
       if (status == 500) return;

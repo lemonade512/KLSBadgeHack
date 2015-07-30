@@ -1,10 +1,13 @@
 <h1>KLS Signin</h1>
 
-<span ng-hide="errorMessage === undefined">{{errorMessage}}</span>
+<span ng-show="!success && !!errorMessage">{{errorMessage}}</span>
 
-<form novalidate>
+<form ng-show="!success" novalidate>
   <label> Name
     <input type="text" ng-model="user.name"/>
   </label>
   <button ng-click="login(user)">Sign In!</button>
 </form>
+
+
+<span class="student-signinout-success" ng-show="success">Success! {{student.username}} is signed {{student.inClass ? 'in' : 'out'}}</span>
