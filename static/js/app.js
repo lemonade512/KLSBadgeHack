@@ -5,9 +5,9 @@ angular.module('klssignin', ['ngRoute'])
     templateUrl:'templates/signin.html',
     controller: 'SigninCtrl'
   })
-  .when('/register', {
-      templateUrl:'templates/register.html',
-      controller: 'RegisterCtrl'
+  .when('/admin/user-dashboard', {
+      templateUrl:'templates/admin_user_dashboard.html',
+      controller: 'AdminUserDashCtrl'
   })
   ;
 })
@@ -40,43 +40,43 @@ angular.module('klssignin', ['ngRoute'])
     })
   }
 })
-.controller('RegisterCtrl', function($scope, $http, $location) {
-    $scope.parents = [];
-    $http.get("/parents").success(function(data) {
-        $scope.parents = _.pairs(data);
+.controller('AdminUserDashCtrl', function($scope, $http, $location) {
+    $scope.adults = [];
+    $http.get("/adults").success(function(data) {
+        $scope.adults = _.pairs(data);
     });
 
-    $scope.delete_parent = function(parent) {
-        console.log("Deleting " + parent);
-        $http.delete("/parents", {params: {username: parent}});
+    $scope.delete_adult = function(adult) {
+        console.log("Deleting " + adult);
+        $http.delete("/adults", {params: {username: adult}});
     };
 
-    $scope.update_parent = function(parent) {
-        console.log("Updating " + parent);
+    $scope.update_adult = function(adult) {
+        console.log("Updating " + adult);
         // TODO (phillip) Should only update the given params
-        $http.put("/parents", {"username": parent, "params": {"children": ["Hank"]}});
+        $http.put("/adults", {"username": adult, "params": {"students": ["Hank"]}});
     };
 
-    $scope.create_parent = function() {
-        var parent = "John";
-        console.log("Creating " + parent);
-        $http.post("/parents", {"username": parent});
+    $scope.create_adult = function() {
+        var adult = "John";
+        console.log("Creating " + adult);
+        $http.post("/adults", {"username": adult});
     };
 
-    $scope.delete_child = function(child) {
-        console.log("Deleting " + child);
-        $http.delete("/children", {params: {"username": child}});
+    $scope.delete_student = function(student) {
+        console.log("Deleting " + student);
+        $http.delete("/students", {params: {"username": student}});
     };
 
-    $scope.update_child = function(child) {
-        console.log("Updating " + child);
+    $scope.update_student = function(student) {
+        console.log("Updating " + student);
         // TODO (phillip) Should only update the given params
-        $http.put("/children", {"username": child, "params": {"can_signout": true}});
+        $http.put("/students", {"username": student, "params": {"can_signout": true}});
     };
 
-    $scope.create_child = function(child) {
-        console.log("Creating " + child);
-        $http.post("/children", {"username": child});
+    $scope.create_student = function(student) {
+        console.log("Creating " + student);
+        $http.post("/students", {"username": student});
     };
 })
 ;

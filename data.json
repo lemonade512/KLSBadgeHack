@@ -1,51 +1,51 @@
 {
-  "parents": {
+  "adults": {
     "phillip": {
       "deleted": false,
-      "children": [
+      "students": [
         "donald"
       ]
     },
     "mike": {
       "deleted": false,
-      "children": [
+      "students": [
         "bob"
       ]
     },
     "greg": {
       "deleted": false,
-      "children": [
+      "students": [
         "george",
         "fred"
       ]
     },
     "vishesh": {
       "deleted": false,
-      "children": [
+      "students": [
         "imran"
       ]
     }
   },
-  "children" : {
+  "students" : {
     "imran" : {
       "delted": false,
       "can-signin" : false,
       "can-signout" : false,
-      "parent" : "vishesh",
+      "adult" : "vishesh",
       "in-class" : false
     },
     "akshay" : {
       "deleted": false,
       "can-signin" : true,
       "can-signout" : false,
-      "parent" : "vishesh",
+      "adult" : "vishesh",
       "in-class" : false
     },
     "rashmi" : {
       "deleted": false,
       "can-signin" : false,
       "can-signout" : true,
-      "parent" : "vishesh",
+      "adult" : "vishesh",
       "in-class" : false
     }
   }

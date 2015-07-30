@@ -166,40 +166,51 @@ def signinout(p):
 def whosinclass():
     return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
 
-@app.get('/parents')
-def get_parents():
+@app.get('/adults')
+def get_adults():
     load_data()
-    return t.valfilter(lambda v: not v['deleted'], data['parents'])
+    return t.valfilter(lambda v: not v['deleted'], data['adults'])
 
-@app.delete('/parents')
+@app.delete('/adults')
 @params(keys=['username'])
-def delete_parent(p):
+def delete_adult(p):
     print "Deleting %s" % (p['username'])
-    data['parents'][p['username']]['deleted'] = True
+    data['adults'][p['username']]['deleted'] = True
     save_data()
 
-@app.put('/parents')
+@app.put('/adults')
 @params(keys=['username', 'params'])
-def update_parent(p):
+def update_adult(p):
     print "Updating %s" % (p['username'])
     print "%s = %s" % (p['username'], p['params'])
 
-@app.post('/parents')
+@app.post('/adults')
 @params(keys=['username'])
-def create_parent(p):
+def create_adult(p):
     print "Creating %s" % (p['username'])
 
-@app.get('/children')
-def get_children():
+@app.get('/students')
+def get_students():
     load_data()
-    return t.valfilter(lambda v: not v['deleted'], data['parents'])
+    return t.valfilter(lambda v: not v['deleted'], data['adults'])
 
-@app.delete('/children')
+@app.delete('/students')
 @params(keys=['username'])
-def delete_child(c):
+def delete_student(p):
     print "Deleting %s" % (p['username'])
-    data['children'][p['username']]['deleted'] = True
+    data['students'][p['username']]['deleted'] = True
     save_data()
+
+@app.put('/students')
+@params(keys=['username', 'params'])
+def update_student(p):
+    print "Updating %s" %(p['username'])
+    print "%s = %s" %(p['username'], p['params'])
+
+@app.post('/students')
+@params(keys=['username'])
+def create_student(p):
+    print "Creating %s" %(p['username'])
 
 # --------------------------- BASIC STATIC ROUTES
 
