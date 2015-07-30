@@ -18,8 +18,11 @@ def load_data():
     data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
 
 def save_data():
-    json.dump(t.itemmap(lambda i: (i[0], map(lambda u: u.json, i[1])), data),
-              open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
+    json.dump(
+      {'users': map(lambda i: i.json, data['users'].values()),
+        'students': map(lambda i: i.json, data['students'].values()),
+        'interactions': map(lambda i: i.json, data['interactions'])},
+      open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
 
 load_data()
 app = Bottle()
@@ -169,19 +172,19 @@ def index():
 #     else:
 #         jsonabort(400, 'User {} does not exist'.format(p['username']))
 
-# @app.get('/whosinclass')
-# def whosinclass():
-#     return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
+@app.get('/whosinclass')
+def whosinclass():
+    return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
 
-# @app.get('/fulldatadump')
-# @params(opts={'password':None})
-# def fulldatadump(p):
-#     """Required because Heroku has no real file system, so if something
-#        needs to change, then you have to download all the data first."""
-#     if p['password'] == 'secret password':
-#         return data
-#     else:
-#         abort(404, "Not found: '/fulldatadump'")
+@app.get('/fulldatadump')
+@params(opts={'password':None})
+def fulldatadump(p):
+    """Required because Heroku has no real file system, so if something
+       needs to change, then you have to download all the data first."""
+    if p['password'] == 'secret password':
+        return data
+    else:
+        abort(404, "Not found: '/fulldatadump'")
 
 
 @app.get('/adults')
