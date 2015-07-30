@@ -50,12 +50,18 @@ angular.module('klssignin', ['ngRoute'])
   }
 })
 
-.controller('WhosInClassCtrl', function($scope) {
+.controller('WhosInClassCtrl', function($scope, $http) {
   $scope.students = {
-    present: ['phillip', 'vishesh'],
-    absent: ['tim', 'johnny'],
-    nothere: ['sarah']
+    present: [],
+    absent: [],
+    nothere: []
   };
+  $http.get('/whosinclass')
+  .success(function(data,status) {
+    $scope.students.present = data.present || [];
+    $scope.students.absent = data.absent || [];
+    $scope.students.nothere = data.nothere || [];
+  })
 })
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
     $scope.users = [];

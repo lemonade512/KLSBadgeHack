@@ -10,11 +10,13 @@ def parse_date(date_text):
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
 
+
 def date_range(start,end):
     stime = parse_date(start)
     etime = parse_date(end)
     for a in range((etime-stime).days):
         yield (stime + datetime.timedelta(a)).strftime('%Y-%m-%d')
+
 
 class Student(object):
     def __init__(self, name, id,
@@ -115,8 +117,6 @@ class Student(object):
         else:
             raise ValueError('Should be passing in either string date or an interval.')
 
-    def remove_absence(self,a):
-
 
 class User(object):
     def __init__(self,id,name,permissions=None,deleted=False):
@@ -168,8 +168,6 @@ class Interaction(nt('Interaction',
     @property
     def json(self):
         return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
-
-
 
 
 
