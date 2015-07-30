@@ -126,7 +126,7 @@ multipairs=lambda d: list(t.concat(t.map(
 
 @app.get('/')
 def index():
-  return 'Hello World'
+  return static_file('index.html', root="static/")
 
 # --------------------------- BASIC STATIC ROUTES
 
