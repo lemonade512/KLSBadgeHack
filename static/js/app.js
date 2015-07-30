@@ -17,7 +17,7 @@ angular.module('klssignin', ['ngRoute'])
 .controller('SigninCtrl', function($scope, $http, $location) {
   $scope.errorMessage = undefined;
   $scope.success = false;
-  
+
   $scope.login = function(user) {
     $http.get('/signinout', {
       "params": {"username" : user.name}
@@ -71,7 +71,8 @@ angular.module('klssignin', ['ngRoute'])
 
     $scope.delete_student = function(student) {
         console.log("Deleting " + student);
-        $http.delete("/students", {params: {"username": student}}).success(function() {
+        $scope.students[student].deleted = true;
+        $http.put("/students", {"username": student, "params": $scope.students[student]}).success(function() {
             window.location.reload(false);
         });
     };

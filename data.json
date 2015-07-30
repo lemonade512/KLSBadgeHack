@@ -1,5 +1,25 @@
 {
   "students": [
+    {
+        "name": "george",
+        "id": 123512,
+        "authorized": "vishesh",
+        "can_signin": false,
+        "can_signout": true,
+        "in_class": false,
+        "absences": [],
+        "deleted": false
+    },
+    {
+        "name": "bob",
+        "id": 123513,
+        "authorized": "vishesh",
+        "can_signin": false,
+        "can_signout": true,
+        "in_class": false,
+        "absences": [],
+        "deleted": false
+    }
   ],
   "users": [
     {

@@ -211,7 +211,7 @@ def get_students():
 def update_student(p):
     print "Updating {}".format(p['username'])
     print "{} = {}".format(p['username'], p['params'])
-    data['students'][p['username']] = p['params']
+    data['students'][p['username']] = m.Student(**p['params'])
     save_data()
 
 @app.post('/students')
