@@ -1,16 +1,37 @@
-<h1>KLS Register</h1>
+<h1>KLS User Dashboard</h1>
 
 <h2>Students</h2>
-<div ng-repeat="student in students">
-    Name: {{ student[0] }}
-    <button ng-click="delete_student">
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Can Signin</th>
+        <th>Can Signout</th>
+        <th>Authorized Signers</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="(name, student) in students">
+        <td> {{ name }} </td>
+        <!-- TODO make these checkboxes -->
+        <td> <input type="checkbox" ng-model=student['can-signin'] /> </td>
+        <td> <input type="checkbox" ng-model=student['can-signout'] /> </td>
+        <td> <button ng-click="delete_student(name)"> Delete </button> </td>
+        <td> <button ng-click="update_student(name)"> Update </button> </td>
+    </tr>
+</table>
+<button ng-click="create_student()"> Create </button>
 
-<h2>Adults</h1>
-<div ng-repeat="adult in adults">
-    Name: {{ adult[0] }}
-    Children: {{ adult[1].children }}
-    <button ng-click="delete_adult(adult[0])" type="button"> Delete </button>
-    <button ng-click="update_adult(adult[0])" type="button"> Update </button>
-</div>
+<h2>Adults</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Students</th>
+    </tr>
+    <tr ng-repeat="(name, adult) in adults">
+        <td>{{ name }}</td>
+        <td>{{ adult.students }}</td>
+        <td><button ng-click="delete_adult(name)" type="button"> Delete </button></td>
+        <td><button ng-click="update_adult(name)" type="button"> Update </button></td>
+    </tr>
+</table>
 <button ng-click="create_adult()" type="button"> Create </button>
 

@@ -45,7 +45,11 @@ angular.module('klssignin', ['ngRoute'])
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
     $scope.adults = [];
     $http.get("/adults").success(function(data) {
-        $scope.adults = _.pairs(data);
+        $scope.adults = data;
+    });
+    $scope.students = [];
+    $http.get("/students").success(function(data) {
+        $scope.students = data;
     });
 
     $scope.delete_adult = function(adult) {
@@ -67,16 +71,19 @@ angular.module('klssignin', ['ngRoute'])
 
     $scope.delete_student = function(student) {
         console.log("Deleting " + student);
-        $http.delete("/students", {params: {"username": student}});
+        $http.delete("/students", {params: {"username": student}}).success(function() {
+            window.location.reload(false);
+        });
     };
 
     $scope.update_student = function(student) {
         console.log("Updating " + student);
         // TODO (phillip) Should only update the given params
-        $http.put("/students", {"username": student, "params": {"can_signout": true}});
+        $http.put("/students", {"username": student, "params": $scope.students[student]});
     };
 
-    $scope.create_student = function(student) {
+    $scope.create_student = function() {
+        var student = "Sally";
         console.log("Creating " + student);
         $http.post("/students", {"username": student});
     };
