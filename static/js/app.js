@@ -13,7 +13,7 @@ angular.module('klssignin', ['ngRoute'])
 .controller('SigninCtrl', function($scope, $http, $location) {
   $scope.errorMessage = undefined;
   $scope.success = false;
-
+  
   $scope.login = function(user) {
     $http.get('/signinout', {
       "params": {"username" : user.name}
@@ -24,6 +24,8 @@ angular.module('klssignin', ['ngRoute'])
           username: data['username'],
           inClass: data['in-class']
         };
+      } else {
+        $scope.children = data['children']
       }
       $scope.success = true;
     }).error(function(data,status) {

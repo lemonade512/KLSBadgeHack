@@ -8,20 +8,10 @@
     "imran" : {
       "can-signin" : false,
       "can-signout" : false,
-      "parent" : "vishesh",
-      "in-class" : false
-    },
-    "akshay" : {
-      "can-signin" : true,
-      "can-signout" : false,
-      "parent" : "vishesh",
-      "in-class" : false
-    },
-    "rashmi" : {
-      "can-signin" : false,
-      "can-signout" : true,
-      "parent" : "vishesh",
-      "in-class" : false
+      "authorized": ["vishesh"],
+      
+      "in-class" : false,
+      "absences": [["2015-08-05", "2015-08-07"]]
     }
   }
 }

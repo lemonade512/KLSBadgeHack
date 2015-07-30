@@ -6,6 +6,7 @@ from bottle import request, response, abort, error, HTTPResponse
 import json
 import cytoolz as t
 import os.path 
+import models
 
 data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
 app = Bottle()
@@ -97,13 +98,13 @@ def params(keys=[], opts={}, strict=True):
             
             if not all(k in r for k in keys):
                 jsonabort(400, 'Request is missing keys: ' + 
-                          str(list(set(keys) - r.keys())))
+                          str(list(set(keys) - set(r.keys()))))
 
             if strict and not all(p in keys or p in opts for p in r):
                 # since we know that all k in keys is present in r
                 # if the lengths are unequal then for sure there are extra keys. 
                 jsonabort(400, 'Strict mode: request has unrecognized keys: ' + 
-                          str(list(r.keys() - set(keys))))
+                          str(list(set(r.keys()) - set(keys))))
 
             # instead of modifying/using global state, choosing to pass in
             # the updated request as a param means that the handler functions
@@ -158,6 +159,18 @@ def signinout(p):
 @app.get('/whosinclass')
 def whosinclass():
     return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
+
+
+@app.get('/fulldatadump')
+@params(opts={'password':None})
+def fulldatadump(p):
+    """Required because Heroku has no real file system, so if something
+       needs to change, then you have to download all the data first."""
+    if p['password'] == 'secret password':
+        return data
+    else:
+        abort(404, "Not found: '/fulldatadump'")
+
 
 # --------------------------- BASIC STATIC ROUTES
 
