@@ -5,6 +5,10 @@ angular.module('klssignin', ['ngRoute'])
     templateUrl:'templates/signin.html',
     controller: 'SigninCtrl'
   })
+  .when('/register', {
+      templateUrl:'templates/register.html',
+      controller: 'RegisterCtrl'
+  })
   ;
 })
 .controller('MainCtrl', function($scope) {
@@ -35,5 +39,44 @@ angular.module('klssignin', ['ngRoute'])
       }
     })
   }
+})
+.controller('RegisterCtrl', function($scope, $http, $location) {
+    $scope.parents = [];
+    $http.get("/parents").success(function(data) {
+        $scope.parents = _.pairs(data);
+    });
+
+    $scope.delete_parent = function(parent) {
+        console.log("Deleting " + parent);
+        $http.delete("/parents", {params: {username: parent}});
+    };
+
+    $scope.update_parent = function(parent) {
+        console.log("Updating " + parent);
+        // TODO (phillip) Should only update the given params
+        $http.put("/parents", {"username": parent, "params": {"children": ["Hank"]}});
+    };
+
+    $scope.create_parent = function() {
+        var parent = "John";
+        console.log("Creating " + parent);
+        $http.post("/parents", {"username": parent});
+    };
+
+    $scope.delete_child = function(child) {
+        console.log("Deleting " + child);
+        $http.delete("/children", {params: {"username": child}});
+    };
+
+    $scope.update_child = function(child) {
+        console.log("Updating " + child);
+        // TODO (phillip) Should only update the given params
+        $http.put("/children", {"username": child, "params": {"can_signout": true}});
+    };
+
+    $scope.create_child = function(child) {
+        console.log("Creating " + child);
+        $http.post("/children", {"username": child});
+    };
 })
 ;

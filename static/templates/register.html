@@ -1,0 +1,15 @@
+<h1>KLS Register</h1>
+
+<h2>Parents</h1>
+<div ng-repeat="parent in parents">
+    Name: {{ parent[0] }}
+    Children: {{ parent[1].children }}
+    <button ng-click="delete_parent(parent[0])" type="button"> Delete </button>
+    <button ng-click="update_parent(parent[0])" type="button"> Update </button>
+</div>
+<button ng-click="create_parent()" type="button"> Create </button>
+
+<h2>Children</h2>
+<div ng-repeat="child in children">
+    Name: {{ child[0] }}
+    <button ng-click="">
