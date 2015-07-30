@@ -15,17 +15,6 @@ th {
   border-bottom: 2px solid black;
 }
 
-
-.flex-row-wrap {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: true;
-}
-
-.flex-row-wrap * {
-  flex: 1;
-}
-
 td {
     text-align: center;
 }
