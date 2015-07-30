@@ -12,11 +12,17 @@
     </tr>
     <tr ng-repeat="(name, student) in students">
         <td> {{ name }} </td>
-        <td> {{ student['authorized'] }} </td>
         <td> <input type="checkbox" ng-model=student['can-signin'] /> </td>
         <td> <input type="checkbox" ng-model=student['can-signout'] /> </td>
-        <td> <button ng-click="delete_student(name)"> Delete </button> </td>
-        <td> <button ng-click="update_student(name)"> Update </button> </td>
+        <td>
+            <div ng-repeat="user in student['authorized']">
+                {{ user }}
+                <button> - </button>
+            </div>
+            <button class="btn"> Add Signer </button>
+        </td>
+        <td> <button class="btn" ng-click="delete_student(name)"> Delete </button> </td>
+        <td> <button class="btn" ng-click="update_student(name)"> Update </button> </td>
     </tr>
 </table>
 <button ng-click="create_student()"> Create </button>
@@ -32,8 +38,8 @@
     <tr ng-repeat="(name, adult) in adults">
         <td>{{ name }}</td>
         <td>{{ adult.students }}</td>
-        <td><button ng-click="delete_adult(name)" type="button"> Delete </button></td>
-        <td><button ng-click="update_adult(name)" type="button"> Update </button></td>
+        <td><button class="btn" ng-click="delete_adult(name)" type="button"> Delete </button></td>
+        <td><button class="btn" ng-click="update_adult(name)" type="button"> Update </button></td>
     </tr>
 </table>
 <button ng-click="create_adult()" type="button"> Create </button>

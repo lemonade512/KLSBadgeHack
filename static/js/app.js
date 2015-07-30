@@ -50,6 +50,7 @@ angular.module('klssignin', ['ngRoute'])
     $scope.students = [];
     $http.get("/students").success(function(data) {
         $scope.students = data;
+        console.log($scope.students);
     });
 
     $scope.delete_adult = function(adult) {

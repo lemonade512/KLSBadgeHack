@@ -14,3 +14,11 @@ table {
 th {
     border-bottom: 2px solid black;
 }
+
+td {
+    text-align: center;
+}
+
+.btn {
+    width: 100%;
+}
