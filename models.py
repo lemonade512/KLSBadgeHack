@@ -119,6 +119,10 @@ class User(object):
             self.name, self.id, self.permissions)
 
     @property
+    def json(self):
+        return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
+
+    @property
     def name(self):
         return self._name
 
@@ -145,8 +149,12 @@ class User(object):
         self._permissions.remove(role)
 
 
-Interaction = nt('Interaction', ['date', 'student', 'absent', 'in_time', 'out_time'])
-
+class Interaction(nt('Interaction',
+                     ['date', 'student',
+                      'absent', 'in_time', 'out_time'])):
+    @property
+    def json(self):
+        return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
 
 
 

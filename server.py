@@ -5,21 +5,25 @@ from bottle import request, response, abort, error, HTTPResponse
 
 import json
 import cytoolz as t
+import cytoolz.curried as tc
 import os.path
 import models as m
 
-data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
+data = {}
 def load_data():
     global data
     data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
     print(data)
-    data['students'] = map(lambda s: m.Student(**s), data['students'])
+    data['students'] = {s['name']:lambda s: m.Student(**s) for s in data['students']}
     data['users'] = map(lambda u: m.User(**u), data['users'])
     data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
 
 def save_data():
-    json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
+    json.dump(t.itemmap(lambda i: (i[0], map(lambda u: u.json, i[1])), data),
+              open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
 
+
+load_data()
 app = Bottle()
 
 # ------------------------------ UTILITIES --------------------------------
@@ -190,20 +194,19 @@ def get_adults():
 @app.delete('/adults')
 @params(keys=['username'])
 def delete_adult(p):
-    print "Deleting %s" % (p['username'])
     data['adults'][p['username']]['deleted'] = True
     save_data()
 
 @app.put('/adults')
 @params(keys=['username', 'params'])
 def update_adult(p):
-    print "Updating %s" % (p['username'])
+    print "Updating {}".format(p['username'])
     print "%s = %s" % (p['username'], p['params'])
 
 @app.post('/adults')
 @params(keys=['username'])
 def create_adult(p):
-    print "Creating %s" % (p['username'])
+    print "Creating {}".format(p['username'])
 
 @app.get('/students')
 def get_students():
@@ -213,20 +216,20 @@ def get_students():
 @app.delete('/students')
 @params(keys=['username'])
 def delete_student(p):
-    print "Deleting %s" % (p['username'])
+    print "Deleting {}".format(p['username'])
     data['students'][p['username']]['deleted'] = True
     save_data()
 
 @app.put('/students')
 @params(keys=['username', 'params'])
 def update_student(p):
-    print "Updating %s" %(p['username'])
+    print "Updating {}".format(p['username'])
     print "%s = %s" %(p['username'], p['params'])
 
 @app.post('/students')
 @params(keys=['username'])
 def create_student(p):
-    print "Creating %s" %(p['username'])
+    print "Creating {}".format(p['username'])
 
 
 # --------------------------- BASIC STATIC ROUTES
