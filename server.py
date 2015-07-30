@@ -206,7 +206,7 @@ def create_adult(p):
 @app.get('/students')
 def get_students():
     load_data()
-    return t.valfilter(lambda v: not v['deleted'], data['adults'])
+    return t.valfilter(lambda v: not v['deleted'], data['students'])
 
 @app.delete('/students')
 @params(keys=['username'])
@@ -220,6 +220,8 @@ def delete_student(p):
 def update_student(p):
     print "Updating %s" %(p['username'])
     print "%s = %s" %(p['username'], p['params'])
+    data['students'][p['username']] = p['params']
+    save_data()
 
 @app.post('/students')
 @params(keys=['username'])
