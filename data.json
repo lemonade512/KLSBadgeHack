@@ -1,40 +1,13 @@
 {
-  "adults": {
-    "phillip": {
-      "deleted": false,
-      "students": [
-        "donald"
-      ]
-    },
-    "mike": {
-      "deleted": false,
-      "students": [
-        "bob"
-      ]
-    },
-    "greg": {
-      "deleted": false,
-      "students": [
-        "george",
-        "fred"
-      ]
-    },
-    "vishesh": {
-      "deleted": false,
-      "students": [
-        "imran"
-      ]
-    }
-  },
-  "students" : {
-    "imran" : {
-      "deleted": false,
-      "can-signin" : false,
-      "can-signout" : false,
-      "authorized": ["vishesh"],
-
-      "in-class" : false,
-      "absences": [["2015-08-05", "2015-08-07"]]
-    }
-  }
+  "students": [],
+  "users" : [{
+    "name": "vishesh",
+    "id": 123912930123,
+    "deleted": false
+  }, {
+    "name" : "phillip",
+    "id": 1239123981,
+    "deleted": false
+  }],
+  "interactions": []
 }

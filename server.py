@@ -6,12 +6,16 @@ from bottle import request, response, abort, error, HTTPResponse
 import json
 import cytoolz as t
 import os.path
-import models
+import models as m
 
 data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
 def load_data():
     global data
     data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
+    print(data)
+    data['students'] = map(lambda s: m.Student(**s), data['students'])
+    data['users'] = map(lambda u: m.User(**u), data['users'])
+    data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
 
 def save_data():
     json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
@@ -137,53 +141,51 @@ multipairs=lambda d: list(t.concat(t.map(
 def index():
     return static_file('index.html', root="static/")
 
-@app.get('/signinout')
-@params(keys=['username'])
-def signinout(p):
-    """Find a user's children."""
-    if p['username'] in data['parents']:
-        return {'is-child': False, 'children': data['parents'][p['username']]['children']}
+# @app.get('/signinout')
+# @params(keys=['username'])
+# def signinout(p):
+#     """Find a user's children."""
+#     if p['username'] in data['parents']:
+#         return {'is-child': False, 'children': data['parents'][p['username']]['children']}
 
-    elif p['username'] in data['children']:
-        child = data['children'][p['username']]
-        if child['in-class']:
-            if child['can-signout']:
-                # child will just sign themselves out
-                child['in-class'] = False
-                return {'username': p['username'], 'is-child': True, 'in-class' : False}
-            else:
-                jsonabort(400, 'Student {} not authorized for self-signout'.format(p['username']))
-        else:
-            if child['can-signin']:
-                # child will sign themselves in
-                child['in-class'] = True
-                return {'username': p['username'], 'is-child': True, 'in-class': True}
-            else:
-                jsonabort(400, 'Student {} not authorized for self-signin'.format(p['username']))
-    else:
-        jsonabort(400, 'User {} does not exist'.format(p['username']))
+#     elif p['username'] in data['children']:
+#         child = data['children'][p['username']]
+#         if child['in-class']:
+#             if child['can-signout']:
+#                 # child will just sign themselves out
+#                 child['in-class'] = False
+#                 return {'username': p['username'], 'is-child': True, 'in-class' : False}
+#             else:
+#                 jsonabort(400, 'Student {} not authorized for self-signout'.format(p['username']))
+#         else:
+#             if child['can-signin']:
+#                 # child will sign themselves in
+#                 child['in-class'] = True
+#                 return {'username': p['username'], 'is-child': True, 'in-class': True}
+#             else:
+#                 jsonabort(400, 'Student {} not authorized for self-signin'.format(p['username']))
+#     else:
+#         jsonabort(400, 'User {} does not exist'.format(p['username']))
 
-@app.get('/whosinclass')
-def whosinclass():
-    return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
+# @app.get('/whosinclass')
+# def whosinclass():
+#     return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
 
-
-
-@app.get('/fulldatadump')
-@params(opts={'password':None})
-def fulldatadump(p):
-    """Required because Heroku has no real file system, so if something
-       needs to change, then you have to download all the data first."""
-    if p['password'] == 'secret password':
-        return data
-    else:
-        abort(404, "Not found: '/fulldatadump'")
+# @app.get('/fulldatadump')
+# @params(opts={'password':None})
+# def fulldatadump(p):
+#     """Required because Heroku has no real file system, so if something
+#        needs to change, then you have to download all the data first."""
+#     if p['password'] == 'secret password':
+#         return data
+#     else:
+#         abort(404, "Not found: '/fulldatadump'")
 
 
 @app.get('/adults')
 def get_adults():
     load_data()
-    return t.valfilter(lambda v: not v['deleted'], data['adults'])
+    return t.valfilter(lambda v: not v.deleted, data['users'])
 
 @app.delete('/adults')
 @params(keys=['username'])
@@ -253,9 +255,9 @@ def staticcss(resource):
 def statictemplates(resource):
     return static_file(resource, root='static/templates/')
 
-
-#app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-app.run(host='localhost', port=8080, debug=True, reloader=True)
+if __name__ == '__main__':
+  #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+  app.run(host='localhost', port=8080, debug=True, reloader=True)
 
 
 
