@@ -1,23 +1,48 @@
 {
   "parents": {
-    "vishesh" : {
-      "children" : ["imran"]
+    "phillip": {
+      "deleted": false,
+      "children": [
+        "donald"
+      ]
+    },
+    "mike": {
+      "deleted": false,
+      "children": [
+        "bob"
+      ]
+    },
+    "greg": {
+      "deleted": false,
+      "children": [
+        "george",
+        "fred"
+      ]
+    },
+    "vishesh": {
+      "deleted": false,
+      "children": [
+        "imran"
+      ]
     }
   },
   "children" : {
     "imran" : {
+      "delted": false,
       "can-signin" : false,
       "can-signout" : false,
       "parent" : "vishesh",
       "in-class" : false
     },
     "akshay" : {
+      "deleted": false,
       "can-signin" : true,
       "can-signout" : false,
       "parent" : "vishesh",
       "in-class" : false
     },
     "rashmi" : {
+      "deleted": false,
       "can-signin" : false,
       "can-signout" : true,
       "parent" : "vishesh",
@@ -25,5 +50,3 @@
     }
   }
 }
-
-
