@@ -128,13 +128,15 @@ multipairs=lambda d: list(t.concat(t.map(
 def index():
     return static_file('index.html', root="static/")
 
-@app.post('/register')
-@params(keys=['username', 'password'])
-def register(p):
-    if p['username'] in data['users']:
-        jsonabort('That username already exists!')
+@app.get('/login')
+@params(keys=['username'])
+def login(p):
+    """Find a user's children."""
+    if p['username'] not in data['users']:
+        jsonabort(400, 'User {} does not exist'.format(p['username']))
 
-    data['users'][p['username']] = p['password']
+    if t.get(['users', p['username']]) == 'parent':
+        return {}
 
 # --------------------------- BASIC STATIC ROUTES
 

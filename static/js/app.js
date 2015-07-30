@@ -10,7 +10,9 @@ angular.module('klssignin', ['ngRoute'])
 .controller('MainCtrl', function($scope) {
 
 })
-.controller('SigninCtrl', function($scope, $http) {
-
+.controller('SigninCtrl', function($scope, $http, $location) {
+  $scope.login = function(user) {
+    $http.get('/')
+  }
 })
 ;

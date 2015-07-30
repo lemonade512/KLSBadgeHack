@@ -1,1 +1,18 @@
-{}
+{
+  "users": {
+    "vishesh" : "parent",
+    "imran" : "child"
+  },
+  "parents": {
+    "vishesh" : {
+      "children" : ["imran"]
+    }
+  },
+  "children" : {
+    "imran" : {
+      "can_signin" : false,
+      "can_signout" : false,
+      "parent" : "vishesh"
+    }
+  }
+}
