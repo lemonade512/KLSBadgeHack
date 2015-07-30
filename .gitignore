@@ -84,7 +84,7 @@ __pycache__
 # these are genfiles and shouldn't be committed.
 test.html
 onlisp.html
-
+*.pyc
 
 
 
