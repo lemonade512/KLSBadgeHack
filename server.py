@@ -155,7 +155,7 @@ def statictemplates(resource):
     return static_file(resource, root='static/templates/')
 
 
-app.run(host='localhost', port=8080, debug=True, reloader=True)
+app.run(host='0.0.0.0', port=8080, debug=True, reloader=True)
 
 
 
