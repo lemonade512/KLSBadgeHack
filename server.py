@@ -5,10 +5,17 @@ from bottle import request, response, abort, error, HTTPResponse
 
 import json
 import cytoolz as t
-import os.path 
+import os.path
 import models
 
 data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
+def load_data():
+    global data
+    data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
+
+def save_data():
+    json.dump(data, open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
+
 app = Bottle()
 
 # ------------------------------ UTILITIES --------------------------------
@@ -20,27 +27,27 @@ def typename(o):
 def reqinfo():
     """Gives path + method + JSON body of request
 
-    This is the minimum information to figure out what went wrong with the 
-    request that was made to the server. 
+    This is the minimum information to figure out what went wrong with the
+    request that was made to the server.
     """
-    return {'path':request.path, 
+    return {'path':request.path,
             'method' : request.method,
             'body': {k:request.params[k] for k in request.params}
-                    if request.json == None 
+                    if request.json == None
                     else {k:request.json[k] for k in request.json}}
 
 def jsonabort(status,message):
     """Usage: jsonabort(400, 'message') - works just like abort, but json.
-    
-    For JSON REST API, need to be able to send consistent error message with 
-    a cause statement and a status code, along with some information about the 
-    request that was made to cause the error. 
-    
-    this is a parallel function to abort (provided by bottle.py) so use 
-    accordingly. however, it raises HTTPResponse, and so will NOT be 
+
+    For JSON REST API, need to be able to send consistent error message with
+    a cause statement and a status code, along with some information about the
+    request that was made to cause the error.
+
+    this is a parallel function to abort (provided by bottle.py) so use
+    accordingly. however, it raises HTTPResponse, and so will NOT be
     caught by other handlers - it's just a clean exit.
     """
-    if type(status) is not int: 
+    if type(status) is not int:
       abort(500, 'jsonabort requires integer status, got {}'.format(
               typename(status)))
     if type(message) is not str:
@@ -52,23 +59,23 @@ def jsonabort(status,message):
                        body=json.dumps({'message':message, 'request':reqinfo()}))
 
 def params(keys=[], opts={}, strict=True):
-    """Decorator: Basic request verification for json REST endpoints 
-    
-    Checks that the request is valid json, that the json returned is an 
-    object (since lists can lead to XSS attacks and are discouraged in 
+    """Decorator: Basic request verification for json REST endpoints
+
+    Checks that the request is valid json, that the json returned is an
+    object (since lists can lead to XSS attacks and are discouraged in
     json apis) and that all the keys in `keys` are present in the request.
-    
-    In strict mode, the request is not allowed to have extraneous keys 
+
+    In strict mode, the request is not allowed to have extraneous keys
     that aren't present in `keys` or `opts`.
-    
-    Most requests will want to be strict, I can't imagine why you would 
+
+    Most requests will want to be strict, I can't imagine why you would
     want a non-key (required field), non-opt (optional field) parameter
     in the request you're making. What other kinds of fields are there?
     However, leaving the option here for the time being - it might be useful
-    to relax the requirement while developing and the keys aren't finalized. 
+    to relax the requirement while developing and the keys aren't finalized.
     """
     def reqjson(req_fun):
-        # pass through all args to req_fun 
+        # pass through all args to req_fun
         def requirejson_wrapper(*args, **kwargs):
 
             # TODO(vishesh): malformed JSON gives 500 error, should give 400,
@@ -78,16 +85,16 @@ def params(keys=[], opts={}, strict=True):
                 r = None
                 if request.method in ['GET', 'DELETE']:
                     r = {k: request.params[k] for k in request.params}
-                else: 
+                else:
                     r = request.json
             except ValueError as e:
                 jsonabort(400, ('Request should be parseable json, got error: '
                               ''+str(e.args)))
 
             if r == None:
-                # the only time that r will be None is if the json part fails. 
+                # the only time that r will be None is if the json part fails.
                 # request.params being empty will give an empty dictionary instead,
-                # so this logic is okay (don't need to change the expected 
+                # so this logic is okay (don't need to change the expected
                 # content-type based on the request method).
                 jsonabort(400, ('Content-Type should be application/json, got '
                                 ''+str(request.content_type)))
@@ -95,33 +102,33 @@ def params(keys=[], opts={}, strict=True):
             if type(r) is not dict:
                 jsonabort(400, 'Request must be a JSON object, not {}'.format(
                           typename(r)))
-            
+
             if not all(k in r for k in keys):
-                jsonabort(400, 'Request is missing keys: ' + 
+                jsonabort(400, 'Request is missing keys: ' +
                           str(list(set(keys) - set(r.keys()))))
 
             if strict and not all(p in keys or p in opts for p in r):
                 # since we know that all k in keys is present in r
-                # if the lengths are unequal then for sure there are extra keys. 
-                jsonabort(400, 'Strict mode: request has unrecognized keys: ' + 
+                # if the lengths are unequal then for sure there are extra keys.
+                jsonabort(400, 'Strict mode: request has unrecognized keys: ' +
                           str(list(set(r.keys()) - set(keys))))
 
             # instead of modifying/using global state, choosing to pass in
             # the updated request as a param means that the handler functions
             # are all pure functions of their input params.
-            # 
-            # This should make testing them easier - it's one less thing to mock.       
-            return req_fun(t.merge(opts, r), *args, **kwargs)  
+            #
+            # This should make testing them easier - it's one less thing to mock.
+            return req_fun(t.merge(opts, r), *args, **kwargs)
 
         return requirejson_wrapper
     return reqjson
 
-# converts a dictionary to flat list of key/value pairs. 
+# converts a dictionary to flat list of key/value pairs.
 # each key can have multiple values and they will all be unpacked accordingly.
 multipairs=lambda d: list(t.concat(t.map(
-                          lambda i: (lambda k,v: t.concat((k,e) for e in v) 
-                                                if isinstance(v,list) 
-                                                else (k,v))(i[0],i[1]), 
+                          lambda i: (lambda k,v: t.concat((k,e) for e in v)
+                                                if isinstance(v,list)
+                                                else (k,v))(i[0],i[1]),
                       d.items())))
 
 # --------------------------------- REST API -------------------------------
@@ -136,7 +143,7 @@ def signinout(p):
     """Find a user's children."""
     if p['username'] in data['parents']:
         return {'is-child': False, 'children': data['parents'][p['username']]['children']}
-    
+
     elif p['username'] in data['children']:
         child = data['children'][p['username']]
         if child['in-class']:
@@ -161,6 +168,7 @@ def whosinclass():
     return {"present": t.valfilter(lambda c: c['in-class'], data['children'])}
 
 
+
 @app.get('/fulldatadump')
 @params(opts={'password':None})
 def fulldatadump(p):
@@ -170,6 +178,53 @@ def fulldatadump(p):
         return data
     else:
         abort(404, "Not found: '/fulldatadump'")
+
+
+@app.get('/adults')
+def get_adults():
+    load_data()
+    return t.valfilter(lambda v: not v['deleted'], data['adults'])
+
+@app.delete('/adults')
+@params(keys=['username'])
+def delete_adult(p):
+    print "Deleting %s" % (p['username'])
+    data['adults'][p['username']]['deleted'] = True
+    save_data()
+
+@app.put('/adults')
+@params(keys=['username', 'params'])
+def update_adult(p):
+    print "Updating %s" % (p['username'])
+    print "%s = %s" % (p['username'], p['params'])
+
+@app.post('/adults')
+@params(keys=['username'])
+def create_adult(p):
+    print "Creating %s" % (p['username'])
+
+@app.get('/students')
+def get_students():
+    load_data()
+    return t.valfilter(lambda v: not v['deleted'], data['adults'])
+
+@app.delete('/students')
+@params(keys=['username'])
+def delete_student(p):
+    print "Deleting %s" % (p['username'])
+    data['students'][p['username']]['deleted'] = True
+    save_data()
+
+@app.put('/students')
+@params(keys=['username', 'params'])
+def update_student(p):
+    print "Updating %s" %(p['username'])
+    print "%s = %s" %(p['username'], p['params'])
+
+@app.post('/students')
+@params(keys=['username'])
+def create_student(p):
+    print "Creating %s" %(p['username'])
 
 
 # --------------------------- BASIC STATIC ROUTES

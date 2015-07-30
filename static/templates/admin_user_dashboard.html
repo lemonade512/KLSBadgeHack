@@ -1,0 +1,16 @@
+<h1>KLS Register</h1>
+
+<h2>Students</h2>
+<div ng-repeat="student in students">
+    Name: {{ student[0] }}
+    <button ng-click="delete_student">
+
+<h2>Adults</h1>
+<div ng-repeat="adult in adults">
+    Name: {{ adult[0] }}
+    Children: {{ adult[1].children }}
+    <button ng-click="delete_adult(adult[0])" type="button"> Delete </button>
+    <button ng-click="update_adult(adult[0])" type="button"> Update </button>
+</div>
+<button ng-click="create_adult()" type="button"> Create </button>
+

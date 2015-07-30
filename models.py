@@ -19,7 +19,7 @@ def date_range(start,end):
 class Student(object):
     def __init__(self, name, id,
                  authorized=None, can_signin=True, can_signout=False,
-                 in_class=False, absences=None):
+                 in_class=False, absences=None, deleted=False):
         if authorized is None: authorized = set()
         if absences is None: absences = set()
 
@@ -30,6 +30,7 @@ class Student(object):
         self._can_signout = can_signout
         self._in_class = in_class
         self.absences = absences
+        self._deleted = deleted
 
     def __repr__(self):
         return 'Student(name={},id={},can_signin={},can_signout={},in_class={},authorized={},absences={}'.format(
@@ -42,6 +43,10 @@ class Student(object):
     @property
     def id(self):
         return self._id
+
+    @property
+    def deleted(self):
+        return self._deleted
 
     @property
     def can_signin(self):
@@ -71,6 +76,10 @@ class Student(object):
     def set_in_class(self,b):
         self._in_class = b
 
+    @deleted.setter
+    def set_deleted(self,b):
+        self._deleted = b
+
     def add_authorized(self,user):
         l = len(self.authorized)
         self.authorized.add(user)
@@ -97,11 +106,12 @@ class Student(object):
 
 
 class User(object):
-    def __init__(self,id,name,permissions=None):
+    def __init__(self,id,name,permissions=None,deleted=False):
         if permissions == None: permissions = []
 
         self._name = name
         self._id = id
+        self._deleted = deleted
         self._permissions = permissions
 
     def __repr__(self):
@@ -117,15 +127,23 @@ class User(object):
         return self._id
 
     @property
+    def deleted(self):
+        return self._deleted
+
+    @deleted.setter
+    def set_deleted(self, b):
+        self._deleted = b
+
+    @property
     def permissions(self):
         return self._permissions
-
 
     def add_permission(self,role):
         self._permissions.append(role)
 
     def remove_permissions(self,role):
         self._permissions.remove(role)
+
 
 Interaction = nt('Interaction', ['date', 'student', 'absent', 'in_time', 'out_time'])
 

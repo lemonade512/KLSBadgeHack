@@ -1,19 +1,40 @@
 {
-  "parents": {
-    "vishesh" : {
-      "children" : ["imran"]
+  "adults": {
+    "phillip": {
+      "deleted": false,
+      "students": [
+        "donald"
+      ]
+    },
+    "mike": {
+      "deleted": false,
+      "students": [
+        "bob"
+      ]
+    },
+    "greg": {
+      "deleted": false,
+      "students": [
+        "george",
+        "fred"
+      ]
+    },
+    "vishesh": {
+      "deleted": false,
+      "students": [
+        "imran"
+      ]
     }
   },
-  "children" : {
+  "students" : {
     "imran" : {
+      "deleted": false,
       "can-signin" : false,
       "can-signout" : false,
       "authorized": ["vishesh"],
-      
+
       "in-class" : false,
       "absences": [["2015-08-05", "2015-08-07"]]
     }
   }
 }
-
-

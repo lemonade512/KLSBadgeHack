@@ -5,6 +5,10 @@ angular.module('klssignin', ['ngRoute'])
     templateUrl:'templates/signin.html',
     controller: 'SigninCtrl'
   })
+  .when('/admin/user-dashboard', {
+      templateUrl:'templates/admin_user_dashboard.html',
+      controller: 'AdminUserDashCtrl'
+  })
   ;
 })
 .controller('MainCtrl', function($scope) {
@@ -37,5 +41,44 @@ angular.module('klssignin', ['ngRoute'])
       }
     })
   }
+})
+.controller('AdminUserDashCtrl', function($scope, $http, $location) {
+    $scope.adults = [];
+    $http.get("/adults").success(function(data) {
+        $scope.adults = _.pairs(data);
+    });
+
+    $scope.delete_adult = function(adult) {
+        console.log("Deleting " + adult);
+        $http.delete("/adults", {params: {username: adult}});
+    };
+
+    $scope.update_adult = function(adult) {
+        console.log("Updating " + adult);
+        // TODO (phillip) Should only update the given params
+        $http.put("/adults", {"username": adult, "params": {"students": ["Hank"]}});
+    };
+
+    $scope.create_adult = function() {
+        var adult = "John";
+        console.log("Creating " + adult);
+        $http.post("/adults", {"username": adult});
+    };
+
+    $scope.delete_student = function(student) {
+        console.log("Deleting " + student);
+        $http.delete("/students", {params: {"username": student}});
+    };
+
+    $scope.update_student = function(student) {
+        console.log("Updating " + student);
+        // TODO (phillip) Should only update the given params
+        $http.put("/students", {"username": student, "params": {"can_signout": true}});
+    };
+
+    $scope.create_student = function(student) {
+        console.log("Creating " + student);
+        $http.post("/students", {"username": student});
+    };
 })
 ;
