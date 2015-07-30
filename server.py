@@ -1,10 +1,10 @@
-#!/python3
+#!/python
 
 from bottle import Bottle, route, run, static_file, template
 from bottle import request, response, abort, error, HTTPResponse
 
 import json
-import toolz as t
+import cytoolz as t
 import os.path 
 
 data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
@@ -126,7 +126,7 @@ multipairs=lambda d: list(t.concat(t.map(
 
 @app.get('/')
 def index():
-  return static_file('static/index.html')
+  return 'Hello World'
 
 # --------------------------- BASIC STATIC ROUTES
 
