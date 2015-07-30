@@ -128,6 +128,14 @@ multipairs=lambda d: list(t.concat(t.map(
 def index():
     return static_file('index.html', root="static/")
 
+@app.post('/register')
+@params(keys=['username', 'password'])
+def register(p):
+    if p['username'] in data['users']:
+        jsonabort('That username already exists!')
+
+    data['users'][p['username']] = p['password']
+
 # --------------------------- BASIC STATIC ROUTES
 
 @app.get('/img/<resource:path>')
