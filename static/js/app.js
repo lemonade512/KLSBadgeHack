@@ -58,30 +58,31 @@ angular.module('klssignin', ['ngRoute'])
   };
 })
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
-    $scope.adults = [];
-    $http.get("/adults").success(function(data) {
-        $scope.adults = data;
+    $scope.users = [];
+    $http.get("/users").success(function(data) {
+        $scope.users = data;
     });
     $scope.students = [];
     $http.get("/students").success(function(data) {
         $scope.students = data;
+        console.log($scope.students);
     });
 
-    $scope.delete_adult = function(adult) {
-        console.log("Deleting " + adult);
-        $http.delete("/adults", {params: {username: adult}});
+    $scope.delete_user = function(user) {
+        console.log("Deleting " + user);
+        $http.delete("/users", {params: {username: user}});
     };
 
-    $scope.update_adult = function(adult) {
-        console.log("Updating " + adult);
+    $scope.update_user = function(user) {
+        console.log("Updating " + user);
         // TODO (phillip) Should only update the given params
-        $http.put("/adults", {"username": adult, "params": {"students": ["Hank"]}});
+        $http.put("/users", {"username": user, "params": {"students": ["Hank"]}});
     };
 
-    $scope.create_adult = function() {
-        var adult = "John";
-        console.log("Creating " + adult);
-        $http.post("/adults", {"username": adult});
+    $scope.create_user = function() {
+        var user = "John";
+        console.log("Creating " + user);
+        $http.post("/users", {"username": user});
     };
 
     $scope.delete_student = function(student) {

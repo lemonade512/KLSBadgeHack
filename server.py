@@ -194,19 +194,19 @@ def fulldatadump(p):
         abort(404, "Not found: '/fulldatadump'")
 
 
-@app.get('/adults')
-def get_adults():
+@app.get('/users')
+def get_users():
     return {k:v.json for k,v in
             t.valfilter(lambda v: not v.deleted, data['users']).iteritems()}
 
-@app.put('/adults')
+@app.put('/users')
 @params(keys=['user'])
-def update_adult(p):
-    data['users'][p['user']['name']] = User(**p['user'])
+def update_user(p):
+    data['users'][p['user']['name']] = m.User(**p['user'])
 
-@app.post('/adults')
+@app.post('/users')
 @params(keys=['username'])
-def create_adult(p):
+def create_user(p):
     print "Creating {}".format(p['username'])
 
 

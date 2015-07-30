@@ -25,3 +25,11 @@ th {
 .flex-row-wrap * {
   flex: 1;
 }
+
+td {
+    text-align: center;
+}
+
+.btn {
+    width: 100%;
+}
