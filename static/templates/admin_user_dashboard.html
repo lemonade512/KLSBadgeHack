@@ -31,7 +31,7 @@
         <td> <input type="text" ng_model="new_student_id" /> </td>
         <td> <input type="checkbox" ng-model="new_student_can_signin" /> </td>
         <td> <input type="checkbox" ng-model="new_student_can_signout" /> </td>
-        <td colspan="5"> <button class="btn" ng-click="create_student()"> Create </button>
+        <td colspan="3"> <button class="btn" ng-click="create_student()"> Create </button>
 </table>
 
 <h2>Users</h2>
@@ -48,6 +48,10 @@
         <td>{{ user.permissions }}</td>
         <td><button class="btn" ng-click="delete_user(name)" type="button"> Delete </button></td>
     </tr>
+    <tr>
+        <td> <input type="text" ng_model="new_user_name" /> </td>
+        <td> <input type="text" ng_model="new_user_id" /> </td>
+        <td colspan="2"> <button ng-click="create_user()" type="button"> Create </button> </td>
+    </tr>
 </table>
-<button ng-click="create_user()" type="button"> Create </button>
 

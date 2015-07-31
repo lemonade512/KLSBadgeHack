@@ -206,10 +206,12 @@ def update_user(p):
     data['users'][p['username']] = m.User(**p['params'])
     save_data()
 
-@app.post('/users')
-@params(keys=['username'])
+@app.put('/users/create')
+@params(keys=['username', 'id'])
 def create_user(p):
-    print "Creating {}".format(p['username'])
+    print "Creating user {}".format(p['username'])
+    data['users'][p['username']] = m.User(id=p['id'], name=p['username'])
+    save_data()
 
 
 @app.get('/students')
@@ -230,7 +232,7 @@ def update_student(p):
 @params(keys=['username', 'params'])
 def create_student(p):
     print "Creating student {}".format(p['username'])
-    data['students'][p['username']] = m.Student(p['username'], **p['params'])
+    data['students'][p['username']] = m.Student(name=p['username'], **p['params'])
     save_data()
 
 @app.put('/students/patch')
@@ -256,11 +258,6 @@ def student_remove_authorized(p):
     print "Removing {} from {}'s authorized signers".format(p['signer'], p['username'])
     data['students'][p['username']].remove_authorized(p['signer'])
     save_data()
-
-@app.post('/students')
-@params(keys=['username'])
-def create_student(p):
-    print "Creating {}".format(p['username'])
 
 
 # --------------------------- BASIC STATIC ROUTES

@@ -85,9 +85,14 @@ angular.module('klssignin', ['ngRoute'])
     };
 
     $scope.create_user = function() {
-        var user = "John";
-        console.log("Creating " + user);
-        $http.post("/users", {"username": user});
+        var username = $scope.new_user_name;
+        var user_id = $scope.new_user_id;
+        console.log("Creating " + username + " with id: " + user_id);
+        $http.put("/users/create", {"username": username, "id": user_id}).success(function() {
+            $http.get("/users").success(function(data) {
+                $scope.users = data;
+            });
+        });
     };
 
     $scope.delete_student = function(student) {
