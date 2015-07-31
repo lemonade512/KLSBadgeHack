@@ -28,7 +28,9 @@ def save_data():
 load_data()
 app = Bottle()
 
-# ------------------------------ UTILITIES --------------------------------
+# ------------------------------------------------------------------------
+#                               UTILITIES
+# ------------------------------------------------------------------------
 
 def typename(o):
     """Returns classname of `o` in single quotes. eg, typename([]) -> 'list'"""
@@ -141,7 +143,9 @@ multipairs=lambda d: list(t.concat(t.map(
                                                 else (k,v))(i[0],i[1]),
                       d.items())))
 
-# --------------------------------- REST API -------------------------------
+# --------------------------------------------------------------------------
+#                                      REST API
+# --------------------------------------------------------------------------
 
 @app.get('/')
 def index():
@@ -194,6 +198,7 @@ def fulldatadump(p):
     else:
         abort(404, "Not found: '/fulldatadump'")
 
+# ------------------ USER ROUTES ----------------
 
 @app.get('/users')
 def get_users():
@@ -210,6 +215,7 @@ def update_user(p):
 def create_user(p):
     print "Creating {}".format(p['username'])
 
+# ---------------- STUDENT ROUTES --------------------
 
 @app.get('/students')
 def get_students():
@@ -231,7 +237,9 @@ def create_student(p):
     print "Creating {}".format(p['username'])
 
 
-# --------------------------- BASIC STATIC ROUTES
+# ------------------------------------------------------------------------
+#                            BASIC STATIC ROUTES
+# ------------------------------------------------------------------------
 
 @app.get('/img/<resource:path>')
 def staticimages(resource):

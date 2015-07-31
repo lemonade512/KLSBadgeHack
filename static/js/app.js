@@ -61,8 +61,11 @@ angular.module('klssignin', ['ngRoute'])
     $scope.students.present = data.present || [];
     $scope.students.absent = data.absent || [];
     $scope.students.nothere = data.nothere || [];
-  })
+  });
+
+  //TODO(vishesh): make this poll the server every 5 minutes for data
 })
+
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
     $scope.users = [];
     $http.get("/users").success(function(data) {
