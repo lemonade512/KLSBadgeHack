@@ -84,11 +84,6 @@ angular.module('klssignin', ['ngRoute'])
         });
     };
 
-    $scope.update_user = function(username) {
-        console.log("Updating " + username);
-        $http.put("/users", {"username": username, "params": $scope.users[username]});
-    };
-
     $scope.create_user = function() {
         var user = "John";
         console.log("Creating " + user);
@@ -103,11 +98,6 @@ angular.module('klssignin', ['ngRoute'])
                 $scope.students = data;
             });
         });
-    };
-
-    $scope.update_student = function(student) {
-        console.log("Updating " + student);
-        $http.put("/students", {"username": student, "params": $scope.students[student]});
     };
 
     $scope.patch_student = function(student, param) {
