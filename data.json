@@ -1,43 +1,43 @@
 {
   "students": [
     {
-      "absences": [],
-      "can_signin": false,
-      "deleted": false,
-      "can_signout": false,
-      "in_class": false,
+      "absences": [], 
+      "can_signin": false, 
+      "deleted": false, 
+      "can_signout": true, 
+      "in_class": false, 
       "authorized": [
         "vishesh"
-      ],
-      "id": 123513,
+      ], 
+      "id": 123513, 
       "name": "bob"
-    },
+    }, 
     {
-      "absences": [],
-      "can_signin": true,
-      "deleted": false,
-      "can_signout": false,
-      "in_class": false,
+      "absences": [], 
+      "can_signin": true, 
+      "deleted": false, 
+      "can_signout": false, 
+      "in_class": false, 
       "authorized": [
         "vishesh"
-      ],
-      "id": 123512,
+      ], 
+      "id": 123512, 
       "name": "george"
     }
-  ],
+  ], 
   "users": [
     {
-      "deleted": false,
-      "id": 1239123981,
-      "name": "phillip",
+      "deleted": false, 
+      "id": 1239123981, 
+      "name": "phillip", 
       "permissions": []
-    },
+    }, 
     {
-      "deleted": false,
-      "id": 123912930123,
-      "name": "vishesh",
+      "deleted": false, 
+      "id": 123912930123, 
+      "name": "vishesh", 
       "permissions": []
     }
-  ],
+  ], 
   "interactions": []
 }
