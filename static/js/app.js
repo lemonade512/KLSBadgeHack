@@ -123,7 +123,22 @@ angular.module('klssignin', ['ngRoute'])
 
     $scope.new_signers = {};
     $scope.add_signer = function(name) {
-        console.log($scope.new_signers[name]);
+        if($scope.new_signers[name] != null && $scope.new_signers[name] !== "") {
+            console.log("Adding " + $scope.new_signers[name] + " to authorized signers.");
+            $scope.students[name]['authorized'].push($scope.new_signers[name]);
+            $http.put("/students/add-authorized", {"username": name, "signer": $scope.new_signers[name]})
+        } else {
+            console.log("That is empty or null!");
+        }
+    };
+
+    $scope.remove_signer = function(student, signer) {
+        console.log("Removing " + signer + " from " + student + "'s authorized signers.'");
+        var i = $scope.students[student]['authorized'].indexOf(signer);
+        if(i != -1) {
+            $scope.students[student]['authorized'].splice(i, 1);
+        }
+        $http.put("/students/remove-authorized", {"username": student, "signer": signer});
     };
 })
 ;

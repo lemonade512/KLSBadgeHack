@@ -19,7 +19,7 @@
         <td>
             <div ng-repeat="user in student['authorized']">
                 {{ user }}
-                <button> - </button>
+                <button ng-click="remove_signer(name, user)"> - </button>
             </div>
             <input type="text" name="username" ng-model="new_signers[name]">
             <button class="btn" ng-click="add_signer(name)"> Add Signer </button>

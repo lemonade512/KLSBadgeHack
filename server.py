@@ -236,6 +236,20 @@ def patch_student(p):
 
     save_data()
 
+@app.put('/students/add-authorized')
+@params(keys=['username', 'signer'])
+def student_add_authorized(p):
+    print "Adding {} to {}'s authorized signers".format(p['signer'], p['username'])
+    data['students'][p['username']].add_authorized(p['signer'])
+    save_data()
+
+@app.put('/students/remove-authorized')
+@params(keys=['username', 'signer'])
+def student_remove_authorized(p):
+    print "Removing {} from {}'s authorized signers".format(p['signer'], p['username'])
+    data['students'][p['username']].remove_authorized(p['signer'])
+    save_data()
+
 @app.post('/students')
 @params(keys=['username'])
 def create_student(p):
