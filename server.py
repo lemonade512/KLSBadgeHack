@@ -201,9 +201,10 @@ def get_users():
             t.valfilter(lambda v: not v.deleted, data['users']).iteritems()}
 
 @app.put('/users')
-@params(keys=['user'])
+@params(keys=['username', 'params'])
 def update_user(p):
-    data['users'][p['user']['name']] = m.User(**p['user'])
+    data['users'][p['username']] = m.User(**p['params'])
+    save_data()
 
 @app.post('/users')
 @params(keys=['username'])
@@ -223,6 +224,16 @@ def update_student(p):
     print "Updating {}".format(p['username'])
     print "{} = {}".format(p['username'], p['params'])
     data['students'][p['username']] = m.Student(**p['params'])
+    save_data()
+
+@app.put('/students/patch')
+@params(keys=['username', 'param'])
+def patch_student(p):
+    print "Patching {}".format(p['username'])
+    key = p['param'][0]
+    val = p['param'][1]
+    data['students'][p['username']].__setattr__(key, val)
+
     save_data()
 
 @app.post('/students')
