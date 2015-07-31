@@ -76,6 +76,7 @@ angular.module('klssignin', ['ngRoute', 'ngSanitize'])
   $http.get('/interactions')
   .success(function(data) {
     $scope.interactions = data.interactions;
+    console.log($scope.interactions)
   });
 })
 
@@ -181,11 +182,18 @@ angular.module('klssignin', ['ngRoute', 'ngSanitize'])
 .filter('time', function() {
   return function(input, infmt, fmt) {
     if (input) {
-      return input.map(function(x) {
-        return moment(x, infmt || 'YYYY-MM-DD').format(fmt || 'MMMM Do YYYY');
-      })
+      var m = moment(input, infmt || 'YYYY-MM-DD').format(fmt || 'MMMM Do YYYY');
+      return m === 'Invalid Date' ? input : m;
     }
-    return [];
+    return input;
   }
 })
+
+.filter('transform', function() {
+  return function(input, from, to) {
+    if (input === from) return to || '';
+    return input;
+  }
+})
+
 ;

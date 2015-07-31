@@ -217,7 +217,7 @@ def get_interactions():
             if dt in attendance:
                 record.append(attendance[dt])
             elif dt in data['students'][student].absences:
-                record.append((-1,-1))
+                record.append(('',''))
             else:
                 record.append((None,None))
         mat.append(record)
