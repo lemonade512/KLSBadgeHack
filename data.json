@@ -4,19 +4,23 @@
       "absences": [],
       "can_signin": false,
       "deleted": false,
-      "can_signout": true,
+      "can_signout": false,
       "in_class": false,
-      "authorized": ["vishesh"],
+      "authorized": [
+        "vishesh"
+      ],
       "id": 123513,
       "name": "bob"
     },
     {
       "absences": [],
-      "can_signin": false,
+      "can_signin": true,
       "deleted": false,
-      "can_signout": true,
+      "can_signout": false,
       "in_class": false,
-      "authorized": ["vishesh"],
+      "authorized": [
+        "vishesh"
+      ],
       "id": 123512,
       "name": "george"
     }
