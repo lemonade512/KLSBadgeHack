@@ -76,13 +76,17 @@ angular.module('klssignin', ['ngRoute'])
 
     $scope.delete_user = function(user) {
         console.log("Deleting " + user);
-        $http.delete("/users", {params: {username: user}});
+        $scope.users[user].deleted = true;
+        $http.put("/users", {"username":  user, "params": $scope.users[user]}).success(function() {
+            $http.get("/users").success(function(data) {
+                $scope.users = data;
+            });
+        });
     };
 
-    $scope.update_user = function(user) {
-        console.log("Updating " + user);
-        // TODO (phillip) Should only update the given params
-        $http.put("/users", {"username": user, "params": {"students": ["Hank"]}});
+    $scope.update_user = function(username) {
+        console.log("Updating " + username);
+        $http.put("/users", {"username": username, "params": $scope.users[username]});
     };
 
     $scope.create_user = function() {
@@ -93,15 +97,22 @@ angular.module('klssignin', ['ngRoute'])
 
     $scope.delete_student = function(student) {
         console.log("Deleting " + student);
-        $http.delete("/students", {params: {"username": student}}).success(function() {
-            window.location.reload(false);
+        $scope.students[student].deleted = true;
+        $http.put("/students", {"username": student, "params": $scope.students[student]}).success(function() {
+            $http.get("/students").success(function(data) {
+                $scope.students = data;
+            });
         });
     };
 
     $scope.update_student = function(student) {
         console.log("Updating " + student);
-        // TODO (phillip) Should only update the given params
         $http.put("/students", {"username": student, "params": $scope.students[student]});
+    };
+
+    $scope.patch_student = function(student, param) {
+        console.log("Updating " + student + " parameter: " + param);
+        $http.put("/students/patch", {"username": student, "param": [param, $scope.students[student][param]]});
     };
 
     $scope.create_student = function() {

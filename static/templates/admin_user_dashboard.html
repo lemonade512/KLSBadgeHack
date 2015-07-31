@@ -14,14 +14,15 @@
     <tr ng-repeat="(name, student) in students">
         <td> {{ name }} </td>
         <td> {{ student.id }} </td>
-        <td> <input type="checkbox" ng-model=student['can-signin'] /> </td>
-        <td> <input type="checkbox" ng-model=student['can-signout'] /> </td>
+        <td> <input type="checkbox" ng-model=student['can_signin'] ng-change="patch_student(name, 'can_signin')" /> </td>
+        <td> <input type="checkbox" ng-model=student['can_signout'] ng-change="patch_student(name, 'can_signout')"/> </td>
         <td>
             <div ng-repeat="user in student['authorized']">
                 {{ user }}
                 <button> - </button>
             </div>
-            <button class="btn"> Add Signer </button>
+            <input type="text" name="username" ng-model="new_signers[name]">
+            <button class="btn" ng-click="add_signer(name)"> Add Signer </button>
         </td>
         <td> <button class="btn" ng-click="delete_student(name)"> Delete </button> </td>
         <td> <button class="btn" ng-click="update_student(name)"> Update </button> </td>
