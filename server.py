@@ -198,6 +198,61 @@ def fulldatadump(p):
     else:
         abort(404, "Not found: '/fulldatadump'")
 
+# ---------- Interaction Routes --------------------
+
+_g = lambda p: lambda x: getattr(x,p)
+
+@app.get('/interactions')
+def get_interactions():
+    dates = sorted(set(map(_g('date'), data['interactions'])))
+    d = t.pipe(data['interactions'],
+               tc.groupby(lambda i: i.student),
+               tc.valmap(lambda x: t.pipe(t.groupby(lambda i: i.date,x),
+                                          tc.valmap(lambda v: [v[0].time_in, v[0].time_out]))))
+
+    mat = [['student'] + dates]
+    for student, attendance in d.items():
+        record = [student]
+        for dt in dates:
+            if dt in attendance:
+                record.append(attendance[dt])
+            elif dt in data['students'][student].absences:
+                record.append((-1,-1))
+            else:
+                record.append((None,None))
+        mat.append(record)
+
+    return {'interactions': mat}
+
+
+@app.post('/interactions')
+@params(keys=['date', 'student', 'time_in', 'time_out'])
+def create_interaction(p):
+    try:
+      m.parse_date(p['date'])
+    except:
+      jsonabort(400, "{} is not a date string in the form YYYY-mm-dd".format(
+          p['date']))
+
+    if p['student'] not in data['students']:
+      jsonabort(400, 'Student {} does not exist'.format(p['student']))
+
+    try:
+      m.parse_date(p['time_in'])
+    except:
+      jsonabort(400, "{} is not a time string in the form HH:mm:ss".format(
+          p['date']))
+
+    try:
+      m.parse_date(p['time_out'])
+    except:
+      jsonabort(400, "{} is not a date string in the form HH:mm:ss".format(
+          p['date']))
+
+    data['interactions'].append(m.Interaction(**p))
+
+
+
 # ------------------ USER ROUTES ----------------
 
 @app.get('/users')

@@ -35,5 +35,30 @@
       "permissions": []
     }
   ],
-  "interactions": []
+  "interactions": [
+    {
+      "date" : "2015-07-11",
+      "student": "bob",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41"
+    },
+    {
+      "date" : "2015-07-12",
+      "student": "bob",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41"
+    },
+    {
+      "date" : "2015-07-11",
+      "student": "george",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41"
+    },
+    {
+      "date" : "2015-07-12",
+      "student": "george",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41"
+    }
+  ]
 }

@@ -1,4 +1,4 @@
-angular.module('klssignin', ['ngRoute'])
+angular.module('klssignin', ['ngRoute', 'ngSanitize'])
 .config(function($routeProvider) {
   $routeProvider
   .when('/', {
@@ -6,12 +6,16 @@ angular.module('klssignin', ['ngRoute'])
     controller: 'SigninCtrl'
   })
   .when('/admin/user-dashboard', {
-      templateUrl:'templates/admin_user_dashboard.html',
-      controller: 'AdminUserDashCtrl'
+    templateUrl:'templates/admin_user_dashboard.html',
+    controller: 'AdminUserDashCtrl'
   })
   .when('/whosinclass', {
-      templateUrl:'templates/whosinclass.html',
-      controller: 'WhosInClassCtrl'
+    templateUrl:'templates/whosinclass.html',
+    controller: 'WhosInClassCtrl'
+  })
+  .when('/admin/interactions', {
+    templateUrl:'templates/interactions.html',
+    controller: 'InteractionCtrl'
   })
   .otherwise({
     redirectTo: '/'
@@ -64,53 +68,124 @@ angular.module('klssignin', ['ngRoute'])
   });
 
   //TODO(vishesh): make this poll the server every 5 minutes for data
+  // so that it remains up to date.
+})
+
+.controller('InteractionCtrl', function($scope, $http) {
+  $scope.interactions = []
+  $http.get('/interactions')
+  .success(function(data) {
+    $scope.interactions = data.interactions;
+  });
 })
 
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
-    $scope.users = [];
-    $http.get("/users").success(function(data) {
-        $scope.users = data;
+  $scope.users = [];
+  $http.get("/users").success(function(data) {
+    $scope.users = data;
+  });
+  $scope.students = [];
+  $http.get("/students").success(function(data) {
+    $scope.students = data;
+    console.log($scope.students);
+  });
+
+  $scope.delete_user = function(user) {
+    console.log("Deleting " + user);
+    $http.delete("/users", {params: {username: user}});
+  };
+
+  $scope.update_user = function(user) {
+    console.log("Updating " + user);
+    // TODO (phillip) Should only update the given params
+    $http.put("/users", {"username": user, "params": {"students": ["Hank"]}});
+  };
+
+  $scope.create_user = function() {
+    var user = "John";
+    console.log("Creating " + user);
+    $http.post("/users", {"username": user});
+  };
+
+  $scope.delete_student = function(student) {
+    console.log("Deleting " + student);
+    $http.delete("/students", {params: {"username": student}})
+    .success(function() {
+      window.location.reload(false);
     });
-    $scope.students = [];
-    $http.get("/students").success(function(data) {
-        $scope.students = data;
-        console.log($scope.students);
-    });
+  };
 
-    $scope.delete_user = function(user) {
-        console.log("Deleting " + user);
-        $http.delete("/users", {params: {username: user}});
-    };
+  $scope.update_student = function(student) {
+    console.log("Updating " + student);
+    // TODO (phillip) Should only update the given params
+    $http.put("/students", {"username": student,
+                            "params": $scope.students[student]});
+  };
 
-    $scope.update_user = function(user) {
-        console.log("Updating " + user);
-        // TODO (phillip) Should only update the given params
-        $http.put("/users", {"username": user, "params": {"students": ["Hank"]}});
-    };
+  $scope.create_student = function() {
+    var student = "Sally";
+    console.log("Creating " + student);
+    $http.post("/students", {"username": student});
+  };
+})
 
-    $scope.create_user = function() {
-        var user = "John";
-        console.log("Creating " + user);
-        $http.post("/users", {"username": user});
-    };
+.directive('contenteditable', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope: false,
+    transclude: false,
+    link: function(scope, elm, attrs, ctrl) {
+      elm.bind('keydown', function(event) {
+        // esc should revert the value
+        if (event.which == 27) {
+          event.preventDefault();
+          elm.html(ctrl.$viewValue);
+          // TODO(vishesh): this isn't a full solution because
+          // contenteditable could be many elements deep.
+          // This only works if contenteditable is used on a leaf DOM node.
+          event.target.blur();
+        }
+        // enter should store the value
+        if (event.which == 13) {
+          event.preventDefault();
+          event.target.blur();
+        }
+      });
 
-    $scope.delete_student = function(student) {
-        console.log("Deleting " + student);
-        $http.delete("/students", {params: {"username": student}}).success(function() {
-            window.location.reload(false);
+      // view -> model
+      elm.bind('blur', function() {
+        scope.$apply(function() {
+          ctrl.$setViewValue(elm.text().trim());
         });
-    };
+      });
 
-    $scope.update_student = function(student) {
-        console.log("Updating " + student);
-        // TODO (phillip) Should only update the given params
-        $http.put("/students", {"username": student, "params": $scope.students[student]});
-    };
+      // model -> view
+      ctrl.$render = function() {
+        elm.html(ctrl.$viewValue);
+      };
+    }
+  };
+})
 
-    $scope.create_student = function() {
-        var student = "Sally";
-        console.log("Creating " + student);
-        $http.post("/students", {"username": student});
-    };
+.filter('startat', function() {
+    return function(input, start) {
+        if(input) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+        return [];
+    }
+})
+
+.filter('time', function() {
+  return function(input, infmt, fmt) {
+    if (input) {
+      return input.map(function(x) {
+        return moment(x, infmt || 'YYYY-MM-DD').format(fmt || 'MMMM Do YYYY');
+      })
+    }
+    return [];
+  }
 })
 ;

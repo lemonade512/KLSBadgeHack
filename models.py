@@ -4,12 +4,16 @@ from collections import namedtuple as nt
 import datetime
 import cytoolz as t
 
-def parse_date(date_text):
-    try:
-        return datetime.datetime.strptime(date_text, '%Y-%m-%d')
-    except ValueError:
-        raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+def make_date_parser(fmt):
+    def date_parser(date_text):
+      try:
+          return datetime.datetime.strptime(date_text, fmt)
+      except ValueError:
+          raise ValueError("Incorrect data format, should be "+fmt)
+    return date_parser
 
+parse_date = make_date_parser('%Y-%m-%d')
+parse_time = make_date_parser('%H:%M:%S')
 
 def date_range(start,end):
     stime = parse_date(start)
@@ -119,7 +123,7 @@ class Student(object):
 
 
 class User(object):
-    def __init__(self,id,name,permissions=None,deleted=False):
+    def __init__(self,name,id,permissions=None,deleted=False):
         if permissions == None: permissions = []
 
         self._name = name
@@ -133,7 +137,8 @@ class User(object):
 
     @property
     def json(self):
-        return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
+        return t.keymap(lambda k: k[1:] if k.startswith('_') else k,
+                        self.__dict__)
 
     @property
     def name(self):
@@ -164,10 +169,11 @@ class User(object):
 
 class Interaction(nt('Interaction',
                      ['date', 'student',
-                      'absent', 'in_time', 'out_time'])):
+                      'time_in', 'time_out'])):
     @property
     def json(self):
-        return t.keymap(lambda k: k[1:] if k.startswith('_') else k, self.__dict__)
+        return t.keymap(lambda k: k[1:] if k.startswith('_') else k,
+                        dict(self._asdict()))
 
 
 
