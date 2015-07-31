@@ -120,5 +120,10 @@ angular.module('klssignin', ['ngRoute'])
         console.log("Creating " + student);
         $http.post("/students", {"username": student});
     };
+
+    $scope.new_signers = {};
+    $scope.add_signer = function(name) {
+        console.log($scope.new_signers[name]);
+    };
 })
 ;
