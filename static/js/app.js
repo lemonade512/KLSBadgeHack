@@ -1,67 +1,65 @@
 angular.module('klssignin', ['ngRoute'])
 .config(function($routeProvider) {
-  $routeProvider
-  .when('/', {
-    templateUrl:'templates/signin.html',
-    controller: 'SigninCtrl'
-  })
-  .when('/admin/user-dashboard', {
-      templateUrl:'templates/admin_user_dashboard.html',
-      controller: 'AdminUserDashCtrl'
-  })
-  .when('/whosinclass', {
-      templateUrl:'templates/whosinclass.html',
-      controller: 'WhosInClassCtrl'
-  })
-  .otherwise({
-    redirectTo: '/'
-  })
-  ;
+    $routeProvider
+    .when('/', {
+        templateUrl:'templates/signin.html',
+        controller: 'SigninCtrl'
+    })
+    .when('/admin/user-dashboard', {
+        templateUrl:'templates/admin_user_dashboard.html',
+        controller: 'AdminUserDashCtrl'
+    })
+    .when('/whosinclass', {
+        templateUrl:'templates/whosinclass.html',
+        controller: 'WhosInClassCtrl'
+    })
+    .otherwise({
+        redirectTo: '/'
+    })
+    ;
 })
 .controller('MainCtrl', function($scope) {
-
 })
 .controller('SigninCtrl', function($scope, $http, $location) {
-  $scope.errorMessage = undefined;
-  $scope.success = false;
+    $scope.errorMessage = undefined;
+    $scope.success = false;
 
-  $scope.login = function(user) {
-    $http.get('/signinout', {
-      "params": {"username" : user.name}
-    })
-    .success(function(data,status) {
-      if (data['is-child']) {
-        $scope.student = {
-          username: data['username'],
-          inClass: data['in-class']
-        };
-      } else {
-        $scope.children = data['children']
-      }
-      $scope.success = true;
-    }).error(function(data,status) {
-      // 500 errors aren't our problem.
-      if (status == 500) return;
-      // if it's a 400 error, display the message to the client.
-      if (status == 400) {
-        $scope.errorMessage = data.message;
-      }
-    })
-  }
+    $scope.login = function(user) {
+        $http.get('/signinout', {
+            "params": {"username" : user.name}
+        })
+        .success(function(data,status) {
+            if (data['is-child']) {
+                $scope.student = {
+                    username: data.username,
+                    inClass: data['in-class']
+                };
+            } else {
+                $scope.children = data.children;
+            }
+            $scope.success = true;
+        }).error(function(data,status) {
+            // 500 errors aren't our problem.
+            if (status == 500) return;
+            // if it's a 400 error, display the message to the client.
+            if (status == 400) {
+                $scope.errorMessage = data.message;
+            }
+        });
+    };
 })
 
 .controller('WhosInClassCtrl', function($scope, $http) {
-  $scope.students = {
-    present: [],
-    absent: [],
-    nothere: []
-  };
-  $http.get('/whosinclass')
-  .success(function(data,status) {
-    $scope.students.present = data.present || [];
-    $scope.students.absent = data.absent || [];
-    $scope.students.nothere = data.nothere || [];
-  })
+    $scope.students = {
+        present: [],
+        absent: [],
+        nothere: []
+    };
+    $http.get('/whosinclass').success(function(data,status) {
+        $scope.students.present = data.present || [];
+        $scope.students.absent = data.absent || [];
+        $scope.students.nothere = data.nothere || [];
+  });
 })
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
     $scope.users = [];
