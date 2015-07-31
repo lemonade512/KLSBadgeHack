@@ -89,6 +89,8 @@ angular.module('klssignin', ['ngRoute'])
         var user_id = $scope.new_user_id;
         console.log("Creating " + username + " with id: " + user_id);
         $http.put("/users/create", {"username": username, "id": user_id}).success(function() {
+            $scope.new_user_name = "";
+            $scope.new_user_id = "";
             $http.get("/users").success(function(data) {
                 $scope.users = data;
             });
@@ -118,6 +120,10 @@ angular.module('klssignin', ['ngRoute'])
         console.log("Creating " + username + " with id: " + student_id);
         params = {"id": student_id, "can_signin": can_signin, "can_signout": can_signout};
         $http.put("/students/create", {"username": username, "params": params}).success(function() {
+            $scope.new_student_name = "";
+            $scope.new_student_id = "";
+            $scope.new_student_can_signin = false;
+            $scope.new_student_can_signout = false;
             $http.get("/students").success(function(data) {
                 $scope.students = data;
             });
