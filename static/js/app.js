@@ -106,9 +106,17 @@ angular.module('klssignin', ['ngRoute'])
     };
 
     $scope.create_student = function() {
-        var student = "Sally";
-        console.log("Creating " + student);
-        $http.post("/students", {"username": student});
+        var username = $scope.new_student_name;
+        var student_id = $scope.new_student_id;
+        var can_signin = $scope.new_student_can_signin;
+        var can_signout = $scope.new_student_can_signout;
+        console.log("Creating " + username + " with id: " + student_id);
+        params = {"id": student_id, "can_signin": can_signin, "can_signout": can_signout};
+        $http.put("/students/create", {"username": username, "params": params}).success(function() {
+            $http.get("/students").success(function(data) {
+                $scope.students = data;
+            });
+        });
     };
 
     $scope.new_signers = {};

@@ -22,12 +22,17 @@
                 <button ng-click="remove_signer(name, user)"> - </button>
             </div>
             <input type="text" name="username" ng-model="new_signers[name]">
-            <button class="btn" ng-click="add_signer(name)"> Add Signer </button>
+            <button ng-click="add_signer(name)"> Add Signer </button>
         </td>
         <td> <button class="btn" ng-click="delete_student(name)"> Delete </button> </td>
     </tr>
+    <tr>
+        <td> <input type="text" ng_model="new_student_name" /> </td>
+        <td> <input type="text" ng_model="new_student_id" /> </td>
+        <td> <input type="checkbox" ng-model="new_student_can_signin" /> </td>
+        <td> <input type="checkbox" ng-model="new_student_can_signout" /> </td>
+        <td colspan="5"> <button class="btn" ng-click="create_student()"> Create </button>
 </table>
-<button ng-click="create_student()"> Create </button>
 
 <h2>Users</h2>
 <table>

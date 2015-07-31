@@ -226,6 +226,13 @@ def update_student(p):
     data['students'][p['username']] = m.Student(**p['params'])
     save_data()
 
+@app.put('/students/create')
+@params(keys=['username', 'params'])
+def create_student(p):
+    print "Creating student {}".format(p['username'])
+    data['students'][p['username']] = m.Student(p['username'], **p['params'])
+    save_data()
+
 @app.put('/students/patch')
 @params(keys=['username', 'param'])
 def patch_student(p):
