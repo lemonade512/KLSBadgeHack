@@ -14,20 +14,25 @@
     <tr ng-repeat="(name, student) in students">
         <td> {{ name }} </td>
         <td> {{ student.id }} </td>
-        <td> <input type="checkbox" ng-model=student['can-signin'] /> </td>
-        <td> <input type="checkbox" ng-model=student['can-signout'] /> </td>
+        <td> <input type="checkbox" ng-model="student['can_signin']" ng-change="patch_student(name, 'can_signin')" /> </td>
+        <td> <input type="checkbox" ng-model="student['can_signout']" ng-change="patch_student(name, 'can_signout')"/> </td>
         <td>
             <div ng-repeat="user in student['authorized']">
                 {{ user }}
-                <button> - </button>
+                <button ng-click="remove_signer(name, user)"> - </button>
             </div>
-            <button class="btn"> Add Signer </button>
+            <button ng-click="add_signer(name)"> Add Signer </button>
+            <input cols="2" type="text" name="username" ng-model="new_signers[name]">
         </td>
         <td> <button class="btn" ng-click="delete_student(name)"> Delete </button> </td>
-        <td> <button class="btn" ng-click="update_student(name)"> Update </button> </td>
     </tr>
+    <tr>
+        <td> <input type="text" ng_model="new_student_name" /> </td>
+        <td> <input type="text" ng_model="new_student_id" /> </td>
+        <td> <input type="checkbox" ng-model="new_student_can_signin" /> </td>
+        <td> <input type="checkbox" ng-model="new_student_can_signout" /> </td>
+        <td colspan="3"> <button class="btn" ng-click="create_student()"> Create </button>
 </table>
-<button ng-click="create_student()"> Create </button>
 
 <h2>Users</h2>
 <table>
@@ -36,15 +41,17 @@
         <th>ID</th>
         <th>Permissions</th>
         <th></th>
-        <th></th>
     </tr>
     <tr ng-repeat="(name, user) in users">
         <td>{{ name }}</td>
         <td>{{ user.id }}</td>
         <td>{{ user.permissions }}</td>
         <td><button class="btn" ng-click="delete_user(name)" type="button"> Delete </button></td>
-        <td><button class="btn" ng-click="update_user(name)" type="button"> Update </button></td>
+    </tr>
+    <tr>
+        <td> <input type="text" ng_model="new_user_name" /> </td>
+        <td> <input type="text" ng_model="new_user_id" /> </td>
+        <td colspan="2"> <button ng-click="create_user()" type="button"> Create </button> </td>
     </tr>
 </table>
-<button ng-click="create_user()" type="button"> Create </button>
 
