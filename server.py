@@ -291,6 +291,20 @@ def update_student(p):
 def create_student(p):
     print "Creating {}".format(p['username'])
 
+@app.put('/users/add-permission')
+@params(keys=['username', 'permission'])
+def user_add_perm(p):
+    print "Adding {} to {}'s permissions".format(p['permission'], p['username'])
+    data['users'][p['username']].add_permission(p['permission'])
+    save_data()
+
+@app.put('/users/remove-permission')
+@params(keys=['username', 'permission'])
+def user_remove_perm(p):
+    print "Removing {} from {}'s permissions".format(p['permission'], p['username'])
+    data['users'][p['username']].remove_permission(p['permission'])
+    save_data()
+
 
 # ------------------------------------------------------------------------
 #                            BASIC STATIC ROUTES

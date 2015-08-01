@@ -163,7 +163,7 @@ class User(object):
     def add_permission(self,role):
         self._permissions.append(role)
 
-    def remove_permissions(self,role):
+    def remove_permission(self,role):
         self._permissions.remove(role)
 
 

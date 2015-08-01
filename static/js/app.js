@@ -60,7 +60,7 @@ angular.module('klssignin', ['ngRoute'])
 })
 
 .controller('InteractionCtrl', function($scope, $http) {
-  $scope.interactions = []
+  $scope.interactions = [];
   $http.get('/interactions')
   .success(function(data) {
     $scope.interactions = data.interactions;
@@ -68,93 +68,115 @@ angular.module('klssignin', ['ngRoute'])
 })
 
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
-  $scope.users = [];
-  $http.get("/users").success(function(data) {
-    $scope.users = data;
-  });
-  $scope.students = [];
-  $http.get("/students").success(function(data) {
-    $scope.students = data;
-    console.log($scope.students);
-  });
-
-  $scope.delete_user = function(user) {
-    console.log("Deleting " + user);
-    $scope.users[user].deleted = true;
-    $http.put("/users", {"username":  user, "params": $scope.users[user]}).success(function() {
-      $http.get("/users").success(function(data) {
+    $scope.users = [];
+    $http.get("/users").success(function(data) {
         $scope.users = data;
-      });
     });
-  };
-
-  $scope.create_user = function() {
-    var username = $scope.new_user_name;
-    var user_id = $scope.new_user_id;
-    console.log("Creating " + username + " with id: " + user_id);
-    $http.put("/users/create", {"username": username, "id": user_id}).success(function() {
-      $scope.new_user_name = "";
-      $scope.new_user_id = "";
-      $http.get("/users").success(function(data) {
-        $scope.users = data;
-      });
-    });
-  };
-
-  $scope.delete_student = function(student) {
-    console.log("Deleting " + student);
-    $scope.students[student].deleted = true;
-    $http.put("/students", {"username": student, "params": $scope.students[student]}).success(function() {
-      $http.get("/students").success(function(data) {
+    $scope.students = [];
+    $http.get("/students").success(function(data) {
         $scope.students = data;
-      });
+        console.log($scope.students);
     });
-  };
 
-  $scope.patch_student = function(student, param) {
-    console.log("Updating " + student + " parameter: " + param);
-    $http.put("/students/patch", {"username": student, "param": [param, $scope.students[student][param]]});
-  };
+    $scope.delete_user = function(user) {
+        console.log("Deleting " + user);
+        $scope.users[user].deleted = true;
+        $http.put("/users", {"username":  user, "params": $scope.users[user]}).success(function() {
+            $http.get("/users").success(function(data) {
+                $scope.users = data;
+            });
+        });
+    };
 
-  $scope.create_student = function() {
-    var username = $scope.new_student_name;
-    var student_id = $scope.new_student_id;
-    var can_signin = ($scope.new_student_can_signin === undefined) ? false : true;
-    var can_signout = ($scope.new_student_can_signout === undefined) ? false : true;
-    console.log("Creating " + username + " with id: " + student_id);
-    params = {"id": student_id, "can_signin": can_signin, "can_signout": can_signout};
-    $http.put("/students/create", {"username": username, "params": params}).success(function() {
-      $scope.new_student_name = "";
-      $scope.new_student_id = "";
-      $scope.new_student_can_signin = false;
-      $scope.new_student_can_signout = false;
-      $http.get("/students").success(function(data) {
-        $scope.students = data;
-      });
-    });
-  };
+    $scope.create_user = function() {
+        var username = $scope.new_user_name;
+        var user_id = $scope.new_user_id;
+        console.log("Creating " + username + " with id: " + user_id);
+        $http.put("/users/create", {"username": username, "id": user_id}).success(function() {
+            $scope.new_user_name = "";
+            $scope.new_user_id = "";
+            $http.get("/users").success(function(data) {
+                $scope.users = data;
+            });
+        });
+    };
 
-  $scope.new_signers = {};
-  $scope.add_signer = function(name) {
-    if($scope.new_signers[name] !== null && $scope.new_signers[name] !== "") {
-      console.log("Adding " + $scope.new_signers[name] + " to authorized signers.");
-      $scope.students[name].authorized.push($scope.new_signers[name]);
-      $http.put("/students/add-authorized", {"username": name, "signer": $scope.new_signers[name]});
-    } else {
-      console.log("That is empty or null!");
-    }
-  };
+    $scope.delete_student = function(student) {
+        console.log("Deleting " + student);
+        $scope.students[student].deleted = true;
+        $http.put("/students", {"username": student, "params": $scope.students[student]}).success(function() {
+            $http.get("/students").success(function(data) {
+                $scope.students = data;
+            });
+        });
+    };
 
-  $scope.remove_signer = function(student, signer) {
-    console.log("Removing " + signer + " from " + student + "'s authorized signers.'");
-    var i = $scope.students[student].authorized.indexOf(signer);
-    if(i != -1) {
-      $scope.students[student].authorized.splice(i, 1);
-    }
-    $http.put("/students/remove-authorized", {"username": student, "signer": signer});
-  };
+    $scope.patch_student = function(student, param) {
+        console.log("Updating " + student + " parameter: " + param);
+        $http.put("/students/patch", {"username": student, "param": [param, $scope.students[student][param]]});
+    };
 
+    $scope.create_student = function() {
+        var username = $scope.new_student_name;
+        var student_id = $scope.new_student_id;
+        var can_signin = ($scope.new_student_can_signin === undefined) ? false : true;
+        var can_signout = ($scope.new_student_can_signout === undefined) ? false : true;
+        console.log("Creating " + username + " with id: " + student_id);
+        params = {"id": student_id, "can_signin": can_signin, "can_signout": can_signout};
+        $http.put("/students/create", {"username": username, "params": params}).success(function() {
+            $scope.new_student_name = "";
+            $scope.new_student_id = "";
+            $scope.new_student_can_signin = false;
+            $scope.new_student_can_signout = false;
+            $http.get("/students").success(function(data) {
+                $scope.students = data;
+            });
+        });
+    };
+
+    $scope.new_signers = {};
+    $scope.add_signer = function(name) {
+        if($scope.new_signers[name] !== undefined && $scope.new_signers[name] !== "") {
+            console.log("Adding " + $scope.new_signers[name] + " to authorized signers.");
+            $scope.students[name].authorized.push($scope.new_signers[name]);
+            $http.put("/students/add-authorized", {"username": name, "signer": $scope.new_signers[name]});
+            $scope.new_signers[name] = "";
+        } else {
+            console.log("That is empty or undefined!");
+        }
+    };
+
+    $scope.remove_signer = function(student, signer) {
+        console.log("Removing " + signer + " from " + student + "'s authorized signers.");
+        var i = $scope.students[student].authorized.indexOf(signer);
+        if(i != -1) {
+            $scope.students[student].authorized.splice(i, 1);
+        }
+        $http.put("/students/remove-authorized", {"username": student, "signer": signer});
+    };
+
+    $scope.new_permissions = {};
+    $scope.add_permission = function(name) {
+        if($scope.new_permissions[name] !== undefined && $scope.new_permissions[name] !== "") {
+            console.log("Adding " + $scope.new_permissions[name] + " to permission.");
+            $scope.users[name].permissions.push($scope.new_permissions[name]);
+            $http.put("/users/add-permission", {"username": name, "permission": $scope.new_permissions[name]});
+            $scope.new_permissions[name] = "";
+        } else {
+            console.log("That is empty or undefined!");
+        }
+    };
+
+    $scope.remove_permission = function(user, permission) {
+        console.log("Removing " + permission + " from " + user + "'s permissions.");
+        var i = $scope.users[user].permissions.indexOf(permission);
+        if(i != -1) {
+            $scope.users[user].permissions.splice(i, 1);
+        }
+        $http.put("/users/remove-permission", {"username": user, "permission": permission});
+    };
 })
+
 
 .directive('contenteditable', function() {
   return {
@@ -202,7 +224,7 @@ angular.module('klssignin', ['ngRoute'])
       return input.slice(start);
     }
     return [];
-  }
+  };
 })
 
 .filter('time', function() {

@@ -9,7 +9,6 @@
         <th>Can Signout</th>
         <th>Authorized Signers</th>
         <th></th>
-        <th></th>
     </tr>
     <tr ng-repeat="(name, student) in students">
         <td> {{ name }} </td>
@@ -45,7 +44,14 @@
     <tr ng-repeat="(name, user) in users">
         <td>{{ name }}</td>
         <td>{{ user.id }}</td>
-        <td>{{ user.permissions }}</td>
+        <td>
+            <div ng-repeat="perm in user.permissions">
+                {{ perm }}
+                <button ng-click="remove_permission(name, perm)"> - </button>
+            </div>
+            <input type="text" name="permission" ng-model="new_permissions[name]">
+            <button ng-click="add_permission(name)"> Add Permission </button>
+        </td>
         <td><button class="btn" ng-click="delete_user(name)" type="button"> Delete </button></td>
     </tr>
     <tr>
