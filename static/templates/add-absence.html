@@ -1,0 +1,24 @@
+<div ng-include src="'templates/partials/admin-navbar.html'"></div>
+
+<h1>Add Long Term Absence</h1>
+
+<div ng-show="!!errorMessage">
+    {{errorMessage}}
+</div>
+
+<div>
+    Select a Student:
+    <select ng-model="a.student">
+        <option value="{{i}}" ng-repeat="i in students">{{i}}</option>
+    </select>
+</div>
+<div>
+    Enter Start Date (Student is absent starting this day):
+    <input type="date" ng-model="a.startdate">
+</div>
+<div>
+    Enter End Date (Student is back in class starting this day):
+    <input type="date" ng-model="a.enddate">
+</div>
+
+<button ng-click="submit(a)">Submit Absence</button>
