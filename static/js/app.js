@@ -1,30 +1,40 @@
 angular.module('klssignin', ['ngRoute'])
 .config(function($routeProvider) {
-  $routeProvider
-  .when('/', {
-    templateUrl:'templates/signin.html',
-    controller: 'SigninCtrl'
-  })
-  .when('/admin/user-dashboard', {
-    templateUrl:'templates/admin_user_dashboard.html',
-    controller: 'AdminUserDashCtrl'
-  })
-  .when('/whosinclass', {
-    templateUrl:'templates/whosinclass.html',
-    controller: 'WhosInClassCtrl'
-  })
-  .when('/admin/interactions', {
-    templateUrl:'templates/interactions.html',
-    controller: 'InteractionCtrl'
-  })
-  .when('/admin/add-absence', {
-    templateUrl: 'templates/add-absence.html',
-    controller: 'AddAbsenceCtrl'
-  })
-  .otherwise({
-    redirectTo: '/'
-  })
-  ;
+    $routeProvider
+    .when('/', {
+        templateUrl:'templates/signin.html',
+        controller: 'SigninCtrl',
+        authorizationRequired: false
+    })
+    .when('/admin/user-dashboard', {
+        templateUrl:'templates/admin_user_dashboard.html',
+        controller: 'AdminUserDashCtrl',
+        authorizationRequired: true
+    })
+    .when('/whosinclass', {
+        templateUrl:'templates/whosinclass.html',
+        controller: 'WhosInClassCtrl',
+        authorizationRequired: false
+    })
+    .when('/admin/interactions', {
+        templateUrl:'templates/interactions.html',
+        controller: 'InteractionCtrl',
+        authorizationRequired: true
+    })
+    .when('/admin/add-absence', {
+        templateUrl: 'templates/add-absence.html',
+        controller: 'AddAbsenceCtrl',
+        authorizationRequired: true
+    })
+    .when('/login', {
+        templateUrl: 'templates/login.html',
+        controller: 'LoginCtrl',
+        authorizationRequired: false
+    })
+    .otherwise({
+        redirectTo: '/'
+    })
+    ;
 })
 .controller('MainCtrl', function($scope) {
 })
@@ -87,6 +97,8 @@ angular.module('klssignin', ['ngRoute'])
 .controller('AdminUserDashCtrl', function($scope, $http, $location) {
     $scope.users = [];
     $http.get("/users").success(function(data) {
+        console.log("Got users");
+        console.log(data);
         $scope.users = data;
     });
     $scope.students = [];
@@ -94,6 +106,9 @@ angular.module('klssignin', ['ngRoute'])
         $scope.students = data;
         console.log($scope.students);
     });
+
+    console.log("Users");
+    console.log($scope.users);
 
     $scope.delete_user = function(user) {
         console.log("Deleting " + user);
@@ -193,8 +208,6 @@ angular.module('klssignin', ['ngRoute'])
         $http.put("/users/remove-permission", {"username": user, "permission": permission});
     };
 })
-
-
 .directive('contenteditable', function() {
   return {
     restrict: 'A',
@@ -233,7 +246,16 @@ angular.module('klssignin', ['ngRoute'])
     }
   };
 })
+.controller('LoginCtrl', function($scope, $rootScope, $http, $location, $routeParams) {
+    console.log("Route params");
+    console.log($routeParams);
 
+    $scope.submit_login = function() {
+        $rootScope.login("password");
+        console.log("Success!");
+        $location.path($routeParams.next);
+    };
+})
 .filter('startat', function() {
   return function(input, start) {
     if(input) {
@@ -251,14 +273,27 @@ angular.module('klssignin', ['ngRoute'])
       return m === 'Invalid Date' ? input : m;
     }
     return input;
-  }
+  };
 })
 
 .filter('transform', function() {
   return function(input, from, to) {
     if (input === from) return to || '';
     return input;
-  }
+  };
 })
+.run( function($rootScope, $location) {
+    $rootScope.$on("$routeChangeStart", function(event, next, current0) {
+        console.log("is_admin: " + $rootScope.is_admin);
+        console.log(next.authorizationRequired);
+        if (next.authorizationRequired && !$rootScope.is_admin) {
+            $location.path("/login").search({next: next.originalPath});
+        }
+    });
 
+    $rootScope.login = function(pass) {
+        console.log("password: " + pass);
+        $rootScope.is_admin = true;
+    };
+})
 ;
