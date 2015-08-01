@@ -31,7 +31,6 @@ angular.module('klssignin', ['ngRoute'])
 .controller('SigninCtrl', function($scope, $http) {
 
 })
-
 .controller('WhosInClassCtrl', function($scope, $http) {
   $scope.students = {
     present: [],
