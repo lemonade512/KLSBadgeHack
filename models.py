@@ -104,22 +104,11 @@ class Student(object):
     def remove_authorized(self, user):
         self._authorized.remove(user)
 
-    def add_absence(self,a):
-        if isinstance(a,str):
-            #will raise valueerror if a is not what is expected.
-            parse_date(a)
+    def add_absence(self,a,b=None):
+        if b == None:
             self._absences.append(a)
-
-        elif isinstance(a,list):
-            if len(a) is not 2:
-                raise ValueError('List should have [start,end], length was {}'.format(len(a)))
-            parse_date(a[0])
-            parse_date(a[1])
-
-            self._absences.extend(date_range(*a))
-
         else:
-            raise ValueError('Should be passing in either string date or an interval.')
+            self._absences.extend(date_range(a,b))
 
 
 class User(object):

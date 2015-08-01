@@ -18,11 +18,13 @@ def load_data():
     data['users'] = {u['name']:m.User(**u) for u in data['users']}
     data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
 
+
+def json_data(data):
+    return {'users': map(lambda i: i.json, data['users'].values()),
+            'students': map(lambda i: i.json, data['students'].values()),
+            'interactions': map(lambda i: i.json, data['interactions'])}
 def save_data():
-    json.dump(
-      {'users': map(lambda i: i.json, data['users'].values()),
-        'students': map(lambda i: i.json, data['students'].values()),
-        'interactions': map(lambda i: i.json, data['interactions'])},
+    json.dump(json_data(data),
       open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
 
 load_data()
@@ -194,7 +196,7 @@ def fulldatadump(p):
     """Required because Heroku has no real file system, so if something
        needs to change, then you have to download all the data first."""
     if p['password'] == 'secret password':
-        return data
+        return json_data(data)
     else:
         abort(404, "Not found: '/fulldatadump'")
 
@@ -315,6 +317,7 @@ def user_add_perm(p):
     data['users'][p['username']].add_permission(p['permission'])
     save_data()
 
+
 @app.put('/students/add-authorized')
 @params(keys=['username', 'signer'])
 def student_add_authorized(p):
@@ -331,6 +334,32 @@ def student_remove_authorized(p):
 
 
 # --------------------------- BASIC STATIC ROUTES
+@app.post('/add-absence')
+@params(keys=['student', 'startdate', 'enddate'])
+def add_absence(p):
+    if p['student'] not in data['students']:
+      jsonabort(400, 'Could not find student in database')
+
+    try:
+        m.parse_date(p['startdate'])
+        m.parse_date(p['enddate'])
+    except:
+        jsonabort(400, '{} or {} is not in the form YYYY-mm-dd'.format(
+          p['startdate'], p['enddate']))
+
+    if p['enddate'] < p['startdate']:
+        jsonabort(400, 'Enddate should be greater than startdate')
+
+    if p['enddate'] == p['startdate']:
+        data['students'][p['student']].add_absence(p['startdate'])
+
+    data['students'][p['student']].add_absence(p['startdate'], p['enddate'])
+    return data['students'][p['student']].json
+
+
+# ------------------------------------------------------------------------
+#                            BASIC STATIC ROUTES
+# ------------------------------------------------------------------------
 
 @app.get('/img/<resource:path>')
 def staticimages(resource):

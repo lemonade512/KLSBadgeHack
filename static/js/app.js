@@ -28,16 +28,6 @@ angular.module('klssignin', ['ngRoute'])
 })
 .controller('MainCtrl', function($scope) {
 })
-.controller('AddAbsenceCtrl', function($scope, $http) {
-  $scope.students = [];
-  $http.get('/students')
-  .success(function(data) {
-    $scope.students = _.pluck(data, 'name');
-    console.log($scope.students);
-  });
-
-
-})
 .controller('SigninCtrl', function($scope, $http) {
 
 })
@@ -57,6 +47,34 @@ angular.module('klssignin', ['ngRoute'])
 
   //TODO(vishesh): make this poll the server every 5 minutes for data
   // so that it remains up to date.
+})
+
+.controller('AddAbsenceCtrl', function($scope, $http) {
+  $scope.students = [];
+  $http.get('/students')
+  .success(function(data) {
+    $scope.students = _.pluck(data, 'name');
+  });
+
+  $scope.a = {};
+  $scope.submit = function(a) {
+    if (!$scope.a.student || !$scope.a.startdate || !$scope.a.enddate) {
+      $scope.errorMessage = 'Please fill in all the fields';
+      return;
+    }
+    console.log(a);
+    $http.post('/add-absence', {
+      student: a.student,
+      startdate: moment(a.startdate).format('YYYY-MM-DD'),
+      enddate: moment(a.enddate).format('YYYY-MM-DD')
+    }).success(function(data) {
+      $scope.a = {};
+    }).error(function(data,status) {
+      if (status == 400) {
+        $scope.errorMessage = data.message;
+      }
+    });
+  }
 })
 
 .controller('InteractionCtrl', function($scope, $http) {
