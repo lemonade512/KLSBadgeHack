@@ -261,16 +261,23 @@ def get_users():
             t.valfilter(lambda v: not v.deleted, data['users']).iteritems()}
 
 @app.put('/users')
-@params(keys=['user'])
+@params(keys=['username', 'params'])
 def update_user(p):
-    data['users'][p['user']['name']] = m.User(**p['user'])
+    data['users'][p['username']] = m.User(**p['params'])
+    save_data()
 
-@app.post('/users')
-@params(keys=['username'])
+@app.put('/users/create')
+@params(keys=['username', 'id'])
 def create_user(p):
-    print "Creating {}".format(p['username'])
+    print "Creating user {}".format(p['username'])
+    data['users'][p['username']] = m.User(id=p['id'], name=p['username'])
+@app.put('/users/remove-permission')
+@params(keys=['username', 'permission'])
+def user_remove_perm(p):
+    print "Removing {} from {}'s permissions".format(p['permission'], p['username'])
+    data['users'][p['username']].remove_permission(p['permission'])
+    save_data()
 
-# ---------------- STUDENT ROUTES --------------------
 
 @app.get('/students')
 def get_students():
@@ -286,10 +293,20 @@ def update_student(p):
     data['students'][p['username']] = m.Student(**p['params'])
     save_data()
 
-@app.post('/students')
-@params(keys=['username'])
+@app.put('/students/create')
+@params(keys=['username', 'params'])
 def create_student(p):
-    print "Creating {}".format(p['username'])
+    print "Creating student {}".format(p['username'])
+    data['students'][p['username']] = m.Student(name=p['username'], **p['params'])
+    save_data()
+
+@app.put('/students/patch')
+@params(keys=['username', 'param'])
+def patch_student(p):
+    print "Patching {}".format(p['username'])
+    key = p['param'][0]
+    val = p['param'][1]
+    data['students'][p['username']].__setattr__(key, val)
 
 @app.put('/users/add-permission')
 @params(keys=['username', 'permission'])
@@ -298,17 +315,22 @@ def user_add_perm(p):
     data['users'][p['username']].add_permission(p['permission'])
     save_data()
 
-@app.put('/users/remove-permission')
-@params(keys=['username', 'permission'])
-def user_remove_perm(p):
-    print "Removing {} from {}'s permissions".format(p['permission'], p['username'])
-    data['users'][p['username']].remove_permission(p['permission'])
+@app.put('/students/add-authorized')
+@params(keys=['username', 'signer'])
+def student_add_authorized(p):
+    print "Adding {} to {}'s authorized signers".format(p['signer'], p['username'])
+    data['students'][p['username']].add_authorized(p['signer'])
+    save_data()
+
+@app.put('/students/remove-authorized')
+@params(keys=['username', 'signer'])
+def student_remove_authorized(p):
+    print "Removing {} from {}'s authorized signers".format(p['signer'], p['username'])
+    data['students'][p['username']].remove_authorized(p['signer'])
     save_data()
 
 
-# ------------------------------------------------------------------------
-#                            BASIC STATIC ROUTES
-# ------------------------------------------------------------------------
+# --------------------------- BASIC STATIC ROUTES
 
 @app.get('/img/<resource:path>')
 def staticimages(resource):
