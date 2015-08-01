@@ -1,4 +1,4 @@
-angular.module('klssignin', ['ngRoute', 'ngSanitize'])
+angular.module('klssignin', ['ngRoute'])
 .config(function($routeProvider) {
   $routeProvider
   .when('/', {
