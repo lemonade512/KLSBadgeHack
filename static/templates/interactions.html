@@ -1,0 +1,15 @@
+<h1>Interactions (Signins and Signouts)</h1>
+<table>
+  <tr>
+    <th>{{interactions[0][0]}}</th>
+    <th ng-repeat="k in interactions[0] | startat: 1">{{k | time}}</th>
+  </tr>
+  <tr ng-repeat="i in interactions | startat: 1">
+    <td>{{i[0]}}</td>
+    <td ng-repeat="k in i | startat: 1">
+      <div ng-repeat="t in k track by $index">
+        {{t | time:'H:m:s':'h:mmA' | transform:'':'absent' | transform:null:'not here'}}
+      </div>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,33 @@
+<h1>Who's in Class? </h1>
+
+<label> Find Someone
+  <input type="text" ng-model="filtertext">
+</label>
+
+<div>
+  <h2>In Class</h2>
+  <div class="flex-row-wrap">
+    <span ng-repeat="student in students.present">
+      {{student}}
+    </span>
+  </div>
+</div>
+
+<div>
+  <h2>Absent</h2>
+  <div class="flex-row-wrap">
+    <span ng-repeat="student in students.absent">
+      {{student}}
+    </span>
+  </div>
+</div>
+
+<div>
+  <h2>Not Here</h2>
+  <div class="flex-row-wrap">
+    <span ng-repeat="student in students.nothere">
+      {{student}}
+    </span>
+  </div>
+</div>
+
