@@ -17,6 +17,10 @@ angular.module('klssignin', ['ngRoute'])
     templateUrl:'templates/interactions.html',
     controller: 'InteractionCtrl'
   })
+  .when('/admin/add-absence', {
+    templateUrl: 'templates/add-absence.html',
+    controller: 'AddAbsenceCtrl'
+  })
   .otherwise({
     redirectTo: '/'
   })
@@ -24,33 +28,18 @@ angular.module('klssignin', ['ngRoute'])
 })
 .controller('MainCtrl', function($scope) {
 })
-.controller('SigninCtrl', function($scope, $http, $location) {
-  $scope.errorMessage = undefined;
-  $scope.success = false;
+.controller('AddAbsenceCtrl', function($scope, $http) {
+  $scope.students = [];
+  $http.get('/students')
+  .success(function(data) {
+    $scope.students = _.pluck(data, 'name');
+    console.log($scope.students);
+  });
 
-  $scope.login = function(user) {
-    $http.get('/signinout', {
-      "params": {"username" : user.name}
-    })
-    .success(function(data,status) {
-      if (data['is-child']) {
-        $scope.student = {
-          username: data.username,
-          inClass: data['in-class']
-        };
-      } else {
-        $scope.children = data.children;
-      }
-      $scope.success = true;
-    }).error(function(data,status) {
-      // 500 errors aren't our problem.
-      if (status == 500) return;
-      // if it's a 400 error, display the message to the client.
-      if (status == 400) {
-        $scope.errorMessage = data.message;
-      }
-    });
-  };
+
+})
+.controller('SigninCtrl', function($scope, $http) {
+
 })
 
 .controller('WhosInClassCtrl', function($scope, $http) {
