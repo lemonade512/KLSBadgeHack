@@ -13,6 +13,7 @@
     <h3 id="message">{{message or ''}}</h3>
     <script>
       var num = '';
+      $('#barcode').val(num);
       $(document).keypress(function(e) {
         switch(e.which) {
           case 48:

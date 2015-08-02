@@ -2,19 +2,14 @@ angular.module('klssignin', ['ngRoute'])
 .config(function($routeProvider) {
     $routeProvider
     .when('/', {
-        templateUrl:'templates/signin.html',
-        controller: 'SigninCtrl',
+        templateUrl:'templates/whosinclass.html',
+        controller: 'WhosInClassCtrl',
         authorizationRequired: false
     })
     .when('/user-dashboard', {
         templateUrl:'templates/admin_user_dashboard.html',
         controller: 'AdminUserDashCtrl',
         authorizationRequired: true
-    })
-    .when('/whosinclass', {
-        templateUrl:'templates/whosinclass.html',
-        controller: 'WhosInClassCtrl',
-        authorizationRequired: false
     })
     .when('/interactions', {
         templateUrl:'templates/interactions.html',
