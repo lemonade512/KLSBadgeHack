@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from bottle import Bottle, route, run, static_file, template
+from bottle import Bottle, route, run, static_file, template, TEMPLATE_PATH
 from bottle import request, response, abort, error, HTTPResponse
 
 import json
@@ -12,46 +12,47 @@ import datetime
 
 data = {}
 def load_data():
-    global data
-    data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
-    data['students'] = {s['name']:m.Student(**s) for s in data['students']}
-    data['users'] = {u['name']:m.User(**u) for u in data['users']}
-    data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
+  global data
+  data = json.load(open(os.path.join(os.path.dirname(__file__), 'data.json')))
+  data['students'] = {s['name']:m.Student(**s) for s in data['students']}
+  data['users'] = {u['name']:m.User(**u) for u in data['users']}
+  data['interactions'] = map(lambda i: m.Interaction(**i), data['interactions'])
 
 
 def json_data(data):
-    return {'users': map(lambda i: i.json, data['users'].values()),
-            'students': map(lambda i: i.json, data['students'].values()),
-            'interactions': map(lambda i: i.json, data['interactions'])}
+  return {'users': map(lambda i: i.json, data['users'].values()),
+          'students': map(lambda i: i.json, data['students'].values()),
+          'interactions': map(lambda i: i.json, data['interactions'])}
 def save_data():
-    json.dump(json_data(data),
-      open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'), indent=2)
+  json.dump(json_data(data),
+            open(os.path.join(os.path.dirname(__file__), 'data.json'), 'w'),
+            indent=2)
 
 load_data()
 app = Bottle()
+TEMPLATE_PATH.append('./static/')
 
 # ------------------------------------------------------------------------
 #                               UTILITIES
 # ------------------------------------------------------------------------
 
 def typename(o):
-    """Returns classname of `o` in single quotes. eg, typename([]) -> 'list'"""
-    return str(type(o))[7:-1]
+  """Returns classname of `o` in single quotes. eg, typename([]) -> 'list'"""
+  return str(type(o))[7:-1]
 
 def reqinfo():
-    """Gives path + method + JSON body of request
-
-    This is the minimum information to figure out what went wrong with the
-    request that was made to the server.
-    """
-    return {'path':request.path,
-            'method' : request.method,
-            'body': {k:request.params[k] for k in request.params}
-                    if request.json == None
-                    else {k:request.json[k] for k in request.json}}
+  """Gives path + method + JSON body of request
+  This is the minimum information to figure out what went wrong with the
+  request that was made to the server.
+  """
+  return {'path':request.path,
+          'method' : request.method,
+          'body': {k:request.params[k] for k in request.params}
+                  if request.json == None
+                  else {k:request.json[k] for k in request.json}}
 
 def jsonabort(status,message):
-    """Usage: jsonabort(400, 'message') - works just like abort, but json.
+  """Usage: jsonabort(400, 'message') - works just like abort, but json.
 
     For JSON REST API, need to be able to send consistent error message with
     a cause statement and a status code, along with some information about the
@@ -61,16 +62,16 @@ def jsonabort(status,message):
     accordingly. however, it raises HTTPResponse, and so will NOT be
     caught by other handlers - it's just a clean exit.
     """
-    if type(status) is not int:
-      abort(500, 'jsonabort requires integer status, got {}'.format(
-              typename(status)))
+  if type(status) is not int:
+    abort(500, 'jsonabort requires integer status, got {}'.format(
+          typename(status)))
     if type(message) is not str:
       abort(500, 'jsonabort requires string message, got {}'.format(
-              typename(message)))
+          typename(message)))
 
-    raise HTTPResponse(status=status, headers={'Content-Type':'application/json'},
-                       # TODO(vishesh): should return the entire request object?
-                       body=json.dumps({'message':message, 'request':reqinfo()}))
+      raise HTTPResponse(status=status, headers={'Content-Type':'application/json'},
+                         # TODO(vishesh): should return the entire request object?
+                         body=json.dumps({'message':message, 'request':reqinfo()}))
 
 def params(keys=[], opts={}, strict=True):
     """Decorator: Basic request verification for json REST endpoints
@@ -97,7 +98,9 @@ def params(keys=[], opts={}, strict=True):
             try:
                 # GET/DELETE have no body. PUT/PATCH/POST have bodies.
                 r = None
-                if request.method in ['GET', 'DELETE']:
+                if (request.method in ['GET', 'DELETE'] or
+                   (request.method == 'POST' and
+                    'json' not in request.content_type)):
                     r = {k: request.params[k] for k in request.params}
                 else:
                     r = request.json
@@ -148,10 +151,35 @@ multipairs=lambda d: list(t.concat(t.map(
 # --------------------------------------------------------------------------
 #                                      REST API
 # --------------------------------------------------------------------------
+@app.get('/')
+def default(message=''):
+  return template('signin', message=message)
+
+@app.post('/signin')
+@params(keys=['barcode'])
+def signin(p):
+  u = filter(lambda v: v.id == p['barcode'], data['users'].values())
+  if len(u) > 0:
+    return template('parent-signin.tpl',
+                    students=map(_g('name'), filter(lambda v: u[0].name in v.authorized,
+                                    data['students'].values())),
+                    name=u[0].name)
+
+  c = filter(lambda s: s.id == p['barcode'], data['students'].values());
+  if len(c) > 0:
+    print 'is student'
+    # should only ever actually equal 1.
+    if not c[0].in_class:
+      if c[0].can_signin:
+        c[0].in_class(True)
+        return static_file('success.html', root='static/templates')
+      else:
+        return template('signin',message='Student ' + c[0].name +
+                       ' not authorized for self-signin.')
 
 @app.get('/admin')
 def index():
-    return static_file('index.html', root="static/")
+  return static_file('index.html', root="static/")
 
 # @app.get('/signinout')
 # @params(keys=['username'])
