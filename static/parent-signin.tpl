@@ -4,14 +4,15 @@
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   </head>
   <body>
-    <h1>Parent Signin Page</h1>
+    <h1>Parent Signout Page</h1>
     <h2>Please scan your card</h2>
     <form action="/parent-signin" method="POST" id="form">
-      <select name="students" id="students" multiple>
-        % for s in students:
-        <option value="{{s}}">{{s}}</option>
-        % end
-      </select>
+
+      % for s in students:
+      <label class="checkbox">
+        <input type="checkbox" name="students" value="{{s}}" /> {{s}}
+      </label>
+      % end
       <input type="text" name="barcode" id="barcode">
     </form>
 
