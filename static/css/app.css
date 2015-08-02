@@ -5,23 +5,6 @@ html,body {
   font-family: Avenir, Arial, sans-serif;
 }
 
-table {
-  width: 90%;
-  margin-left: 5%;
-  text-align: center;
-}
-
 .navbar-nav {
   font-size: 22px;
-}
-th {
-  border-bottom: 2px solid black;
-}
-
-td {
-    text-align: center;
-}
-
-.btn {
-    width: 100%;
 }

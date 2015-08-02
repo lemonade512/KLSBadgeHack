@@ -1,43 +1,85 @@
 <div ng-include src="'templates/partials/admin-navbar.html'"></div>
 
 <div class="container">
-    <h1 class="page-header">KLS User Dashboard</h1>
 
-    <h2>Students</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>ID</th>
-                <th>Can Signin</th>
-                <th>Can Signout</th>
-                <th>Authorized Signers</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="(name, student) in students">
-                <td> {{ name }} </td>
-                <td> {{ student.id }} </td>
-                <td> <input type="checkbox" ng-model="student['can_signin']" ng-change="patch_student(name, 'can_signin')" /> </td>
-                <td> <input type="checkbox" ng-model="student['can_signout']" ng-change="patch_student(name, 'can_signout')"/> </td>
-                <td>
-                    <div ng-repeat="user in student['authorized']">
-                        {{ user }}
-                        <button ng-click="remove_signer(name, user)"> - </button>
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+        <h3>
+            Students
+        </h3>
+      </div>
+      <!-- Table -->
+      <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Can Signin</th>
+            <th>Can Signout</th>
+            <th>Authorized Signers</th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="(name, student) in students">
+            <td> {{ name }} </td>
+            <td> {{ student.id }} </td>
+            <td> <input type="checkbox" ng-model="student['can_signin']" ng-change="patch_student(name, 'can_signin')" /> </td>
+            <td> <input type="checkbox" ng-model="student['can_signout']" ng-change="patch_student(name, 'can_signout')"/> </td>
+            <td>
+                <div ng-repeat="user in student['authorized']">
+                    {{ user }}
+                    <i class="fa fa-times-circle" style="color:#aaa" ng-click="remove_signer(name, user)"></i>
+                </div>
+                <div class="input-group" style="width:300px" >
+                  <input type="text" class="form-control" placeholder="New signer" ng-model="new_signers[name]">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="add_signer(name)">Add</button>
+                  </span>
+                </div>
+            </td>
+            <td> <button class="btn btn-danger" ng-click="delete_student(name)"> Delete </button> </td>
+        </tr>
+      </table>
+      <div class="panel-footer">
+        <div class="row form-horizontal">
+            <div class="col-md-2">
+                <input class="form-control" placeholder="name" type="text" ng_model="new_student_name" />
+            </div>
+            <div class="col-md-2">
+                <input class="form-control"  placeholder="id" type="text" ng_model="new_student_id" />
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="new_student_can_signin"/> Can sign-in?
+                        </label>
                     </div>
-                    <button ng-click="add_signer(name)"> Add Signer </button>
-                    <input cols="2" type="text" name="username" ng-model="new_signers[name]">
-                </td>
-                <td> <button class="btn" ng-click="delete_student(name)"> Delete </button> </td>
-            </tr>
-            <tr>
-                <td> <input type="text" ng_model="new_student_name" /> </td>
-                <td> <input type="text" ng_model="new_student_id" /> </td>
-                <td> <input type="checkbox" ng-model="new_student_can_signin" /> </td>
-                <td> <input type="checkbox" ng-model="new_student_can_signout" /> </td>
-                <td colspan="3"> <button class="btn" ng-click="create_student()"> Create </button>
-        </table>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="new_student_can_signout"/> Can sign-out?
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" ng-click="create_student()"> New Student </button>
+            </div>
+        </div>
+      </div>
+    </div>
 
-    <h2>Users</h2>
-        <table>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+                Users
+            </h3>
+        </div>
+        <!-- Table -->
+        <table class="table">
             <tr>
                 <th>Name</th>
                 <th>ID</th>
@@ -63,6 +105,10 @@
                 <td colspan="2"> <button ng-click="create_user()" type="button"> Create </button> </td>
             </tr>
         </table>
-
+    </div>
 </div>
+
+<script>
+    $("[type='checkbox']").bootstrapSwitch();
+</script>
 
