@@ -14,8 +14,13 @@
     <div>
       <h2>In Class</h2>
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="student in students.present | filter:filtertext">
-          {{student}}
+        <li class="list-group-item"  style="width:110px"ng-repeat="student in students.present | filter:filtertext">
+          <div class="thumbnail-with-caption">
+            <img ng-src="https://randomuser.me/api/portraits/lego/{{$index}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
+            <p class="text-center">{{student}}</p>
+          </div>
+
+
         </li>
       </ul>
     </div>
@@ -23,8 +28,12 @@
     <div>
       <h2>Absent</h2>
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="student in students.absent | filter:filtertext">
-          {{student}}
+        <li class="list-group-item" style="width:110px" ng-repeat="student in students.absent | filter:filtertext">
+          <div class="thumbnail-with-caption">
+            <img ng-src="https://randomuser.me/api/portraits/lego/{{$index}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
+            <p class="text-center">{{student}}</p>
+          </div>
+
         </li>
       </ul>
     </div>
@@ -32,8 +41,12 @@
     <div>
       <h2>Not Here</h2>
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="student in students.nothere | filter:filtertext">
-          {{student}}
+        <li class="list-group-item"  style="width:110px"ng-repeat="student in students.nothere | filter:filtertext">
+          <div class="thumbnail-with-caption">
+            <img ng-src="https://randomuser.me/api/portraits/lego/{{$index}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
+            <p class="text-center">{{student}}</p>
+          </div>
+
         </li>
       </ul>
     </div>
