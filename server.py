@@ -149,7 +149,7 @@ multipairs=lambda d: list(t.concat(t.map(
 #                                      REST API
 # --------------------------------------------------------------------------
 
-@app.get('/')
+@app.get('/admin')
 def index():
     return static_file('index.html', root="static/")
 

@@ -1,3 +1,5 @@
+<div ng-include src="'templates/partials/admin-navbar.html'"></div>
+
 <h1>Who's in Class? </h1>
 
 <label> Find Someone
@@ -7,7 +9,7 @@
 <div>
   <h2>In Class</h2>
   <div class="flex-row-wrap">
-    <span ng-repeat="student in students.present">
+    <span ng-repeat="student in students.present | filter:filtertext">
       {{student}}
     </span>
   </div>
@@ -16,7 +18,7 @@
 <div>
   <h2>Absent</h2>
   <div class="flex-row-wrap">
-    <span ng-repeat="student in students.absent">
+    <span ng-repeat="student in students.absent | filter:filtertext">
       {{student}}
     </span>
   </div>
@@ -25,7 +27,7 @@
 <div>
   <h2>Not Here</h2>
   <div class="flex-row-wrap">
-    <span ng-repeat="student in students.nothere">
+    <span ng-repeat="student in students.nothere | filter:filtertext">
       {{student}}
     </span>
   </div>

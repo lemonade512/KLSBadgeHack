@@ -6,7 +6,7 @@ angular.module('klssignin', ['ngRoute'])
         controller: 'SigninCtrl',
         authorizationRequired: false
     })
-    .when('/admin/user-dashboard', {
+    .when('/user-dashboard', {
         templateUrl:'templates/admin_user_dashboard.html',
         controller: 'AdminUserDashCtrl',
         authorizationRequired: true
@@ -16,20 +16,15 @@ angular.module('klssignin', ['ngRoute'])
         controller: 'WhosInClassCtrl',
         authorizationRequired: false
     })
-    .when('/admin/interactions', {
+    .when('/interactions', {
         templateUrl:'templates/interactions.html',
         controller: 'InteractionCtrl',
         authorizationRequired: true
     })
-    .when('/admin/add-absence', {
+    .when('/add-absence', {
         templateUrl: 'templates/add-absence.html',
         controller: 'AddAbsenceCtrl',
         authorizationRequired: true
-    })
-    .when('/login', {
-        templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl',
-        authorizationRequired: false
     })
     .otherwise({
         redirectTo: '/'
@@ -246,16 +241,6 @@ angular.module('klssignin', ['ngRoute'])
     }
   };
 })
-.controller('LoginCtrl', function($scope, $rootScope, $http, $location, $routeParams) {
-    console.log("Route params");
-    console.log($routeParams);
-
-    $scope.submit_login = function() {
-        $rootScope.login("password");
-        console.log("Success!");
-        $location.path($routeParams.next);
-    };
-})
 .filter('startat', function() {
   return function(input, start) {
     if(input) {
@@ -281,19 +266,5 @@ angular.module('klssignin', ['ngRoute'])
     if (input === from) return to || '';
     return input;
   };
-})
-.run( function($rootScope, $location) {
-    $rootScope.$on("$routeChangeStart", function(event, next, current0) {
-        console.log("is_admin: " + $rootScope.is_admin);
-        console.log(next.authorizationRequired);
-        if (next.authorizationRequired && !$rootScope.is_admin) {
-            $location.path("/login").search({next: next.originalPath});
-        }
-    });
-
-    $rootScope.login = function(pass) {
-        console.log("password: " + pass);
-        $rootScope.is_admin = true;
-    };
 })
 ;
