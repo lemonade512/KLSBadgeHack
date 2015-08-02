@@ -8,3 +8,7 @@ html,body {
 .navbar-nav {
   font-size: 22px;
 }
+
+i.fa-times-circle:hover {
+  cursor: pointer;
+}

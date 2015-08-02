@@ -1,23 +1,43 @@
 <div ng-include src="'templates/partials/admin-navbar.html'"></div>
 
-<h1>Interactions (Signins and Signouts)</h1>
-<table>
-  <tr>
-    <th>{{interactions[0][0]}}</th>
-    <th ng-repeat="k in interactions[0] | startat: 1">{{k | time}}</th>
-  </tr>
-  <tr ng-repeat="i in interactions | startat: 1">
-    <td>{{i[0]}}</td>
-    <td ng-repeat="k in i | startat: 1">
-      <div ng-repeat="t in k track by $index">
-        {{t | transform:'':'absent' | transform:null:'not here'}}
-      </div>
-    </td>
-  </tr>
-</table>
+<div class="container">
+  <h1 class="page-header">Interactions (Signins and Signouts)</h1>
+
+  <div class="panel panel-default">
+    <table class="table">
+      <tr>
+        <th>{{interactions[0][0]}}</th>
+        <th ng-repeat="k in interactions[0] | startat: 1">{{k | time}}</th>
+      </tr>
+      <tr ng-repeat="i in interactions | startat: 1">
+        <td>{{i[0]}}</td>
+        <td ng-repeat="k in i | startat: 1">
+          <div ng-repeat="t in k track by $index">
+            {{t | transform:'':'absent' | transform:null:'not here'}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="text" class="form-control" ng-model="i.student">
+        </td>
+        <td>
+          <input type="date" class="form-control" ng-model="i.date">
+        </td>
+        <td>
+          <div class="row">
+            <div class="col-md-8">
+              <input type="time" class="form-control" ng-model="i.time">
+            </div>
+            <div class="col-md-4">
+              <div class="btn btn-primary">Add Interaction</div>
+            </div>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>
 
 
-<input type="text" ng-model="i.student">
-<input type="date" ng-model="i.date">
-<input type="time" ng-model="i.time">
-<button>Add Interaction</button>
+

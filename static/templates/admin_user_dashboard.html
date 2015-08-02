@@ -42,10 +42,10 @@
       <div class="panel-footer">
         <div class="row form-horizontal">
             <div class="col-md-2">
-                <input class="form-control" placeholder="name" type="text" ng_model="new_student_name" />
+                <input class="form-control" placeholder="Name" type="text" ng_model="new_student_name" />
             </div>
             <div class="col-md-2">
-                <input class="form-control"  placeholder="id" type="text" ng_model="new_student_id" />
+                <input class="form-control"  placeholder="ID" type="text" ng_model="new_student_id" />
             </div>
             <div class="col-md-2">
                 <div class="form-group">
@@ -92,19 +92,31 @@
                 <td>
                     <div ng-repeat="perm in user.permissions">
                         {{ perm }}
-                        <button ng-click="remove_permission(name, perm)"> - </button>
+                        <i class="fa fa-times-circle" style="color:#aaa" ng-click="remove_permission(name, perm)"></i>
                     </div>
-                    <input type="text" name="permission" ng-model="new_permissions[name]">
-                    <button ng-click="add_permission(name)"> Add Permission </button>
+                    <div class="input-group" style="width:300px" >
+                      <input type="text" class="form-control" placeholder="New Permission" name="permission" ng-model="new_permissions[name]">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="add_permission(name)">Add</button>
+                      </span>
+                    </div>
                 </td>
-                <td><button class="btn" ng-click="delete_user(name)" type="button"> Delete </button></td>
-            </tr>
-            <tr>
-                <td> <input type="text" ng_model="new_user_name" /> </td>
-                <td> <input type="text" ng_model="new_user_id" /> </td>
-                <td colspan="2"> <button ng-click="create_user()" type="button"> Create </button> </td>
+                <td><button class="btn btn-danger" ng-click="delete_user(name)" type="button"> Delete </button></td>
             </tr>
         </table>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-md-2">
+                    <input type="text" class="form-control" placeholder="Name" ng_model="new_user_name" />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" placeholder="ID" ng_model="new_user_id" />
+                </div>
+                <div class="col-md-2 col-offset-6">
+                    <button class="btn btn-primary" ng-click="create_user()" type="button"> New User </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
