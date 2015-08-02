@@ -2,9 +2,9 @@
   "students": [
     {
       "absences": [],
-      "can_signin": false,
+      "can_signin": true,
       "deleted": false,
-      "can_signout": true,
+      "can_signout": false,
       "in_class": false,
       "authorized": [
         "vishesh",
@@ -17,7 +17,7 @@
       "absences": [
         "2015-07-11"
       ],
-      "can_signin": false,
+      "can_signin": true,
       "deleted": false,
       "can_signout": true,
       "in_class": false,

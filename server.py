@@ -161,21 +161,53 @@ def signin(p):
   u = filter(lambda v: v.id == p['barcode'], data['users'].values())
   if len(u) > 0:
     return template('parent-signin.tpl',
-                    students=map(_g('name'), filter(lambda v: u[0].name in v.authorized,
+                    students=map(_g('name'), filter(lambda v: u[0].name in v.authorized and v.in_class,
                                     data['students'].values())),
                     name=u[0].name)
 
   c = filter(lambda s: s.id == p['barcode'], data['students'].values());
   if len(c) > 0:
-    print 'is student'
     # should only ever actually equal 1.
     if not c[0].in_class:
       if c[0].can_signin:
-        c[0].in_class(True)
-        return static_file('success.html', root='static/templates')
+        c[0].in_class = True
+        return template('success', students=c[0].name, in_out='in')
       else:
         return template('signin',message='Student ' + c[0].name +
                        ' not authorized for self-signin.')
+    if c[0].in_class:
+      if c[0].can_signout:
+        c[0].in_class = False
+        return template('success', students=c[0].name, in_out='out')
+      else:
+        return template('signin',message='Student ' + c[0].name +
+                       ' not authorized for self-signout.')
+
+  else:
+    # not user and not child
+    return template('signin', message='Barcode ' + p['barcode'] +
+                   ' not recognized.')
+
+@app.post('/parent-signin')
+def parent_signin():
+  barcode = request.forms['barcode']
+  students = request.forms.getlist('students')
+
+  u = filter(lambda v: v.id == p['barcode'], data['users'].values())
+  if len(u) < 0:
+    return template('signin', message='Barcode ' + p['barcode'] +
+                    ' not recognized.')
+
+  # check auth
+  a = [u.name in s.authorized for s in t.get(students, data['students'])]
+  if False in a:
+    return template('signin', message='Not authorized for all students.')
+
+  for s in students:
+    data[s].in_class = False
+
+  return static_file('success.html', root='static/templates')
+
 
 @app.get('/admin')
 def index():
