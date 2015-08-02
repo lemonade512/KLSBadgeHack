@@ -3,23 +3,19 @@ angular.module('klssignin', ['ngRoute'])
     $routeProvider
     .when('/', {
         templateUrl:'templates/whosinclass.html',
-        controller: 'WhosInClassCtrl',
-        authorizationRequired: false
+        controller: 'WhosInClassCtrl'
     })
     .when('/user-dashboard', {
         templateUrl:'templates/admin_user_dashboard.html',
-        controller: 'AdminUserDashCtrl',
-        authorizationRequired: true
+        controller: 'AdminUserDashCtrl'
     })
     .when('/interactions', {
         templateUrl:'templates/interactions.html',
-        controller: 'InteractionCtrl',
-        authorizationRequired: true
+        controller: 'InteractionCtrl'
     })
     .when('/add-absence', {
         templateUrl: 'templates/add-absence.html',
-        controller: 'AddAbsenceCtrl',
-        authorizationRequired: true
+        controller: 'AddAbsenceCtrl'
     })
     .otherwise({
         redirectTo: '/'
