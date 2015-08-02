@@ -5,16 +5,15 @@ html,body {
   font-family: Avenir, Arial, sans-serif;
 }
 
-h1,h2,h3,h4,h5,h6 {
-  font-family: serif;
-}
-
 table {
   width: 90%;
   margin-left: 5%;
   text-align: center;
 }
 
+.navbar-nav {
+  font-size: 22px;
+}
 th {
   border-bottom: 2px solid black;
 }
