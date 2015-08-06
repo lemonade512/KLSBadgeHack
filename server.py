@@ -193,20 +193,21 @@ def parent_signin():
   barcode = request.forms['barcode']
   students = request.forms.getlist('students')
 
-  u = filter(lambda v: v.id == p['barcode'], data['users'].values())
+  u = filter(lambda v: v.id == barcode, data['users'].values())
   if len(u) < 0:
-    return template('signin', message='Barcode ' + p['barcode'] +
+    return template('signin', message='Barcode ' + barcode +
                     ' not recognized.')
 
+  u = u[0]
   # check auth
   a = [u.name in s.authorized for s in t.get(students, data['students'])]
   if False in a:
     return template('signin', message='Not authorized for all students.')
 
   for s in students:
-    data[s].in_class = False
+    data['students'][s].in_class = False
 
-  return static_file('success.html', root='static/templates')
+  return template('success', students=str(students), in_out='out')
 
 
 @app.get('/admin')
@@ -446,8 +447,8 @@ def statictemplates(resource):
     return static_file(resource, root='static/templates/')
 
 if __name__ == '__main__':
-  #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-  app.run(host='localhost', port=8080, debug=True, reloader=True)
+  app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+  # app.run(host='localhost', port=8080, debug=True, reloader=True)
 
 
 

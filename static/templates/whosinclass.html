@@ -16,7 +16,7 @@
       <ul class="list-group">
         <li class="list-group-item"  style="width:110px"ng-repeat="student in students.present | filter:filtertext">
           <div class="thumbnail-with-caption">
-            <img ng-src="https://randomuser.me/api/portraits/lego/{{$index}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
+            <img ng-src="https://randomuser.me/api/portraits/lego/{{student.slice(-1).codePointAt(0) % 10}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
             <p class="text-center">{{student}}</p>
           </div>
 
@@ -30,7 +30,7 @@
       <ul class="list-group">
         <li class="list-group-item" style="width:110px" ng-repeat="student in students.absent | filter:filtertext">
           <div class="thumbnail-with-caption">
-            <img ng-src="https://randomuser.me/api/portraits/lego/{{$index}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
+            <img ng-src="https://randomuser.me/api/portraits/lego/{{student.slice(-1).codePointAt(0) % 10}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
             <p class="text-center">{{student}}</p>
           </div>
 
@@ -43,7 +43,7 @@
       <ul class="list-group">
         <li class="list-group-item"  style="width:110px"ng-repeat="student in students.nothere | filter:filtertext">
           <div class="thumbnail-with-caption">
-            <img ng-src="https://randomuser.me/api/portraits/lego/{{$index}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
+            <img ng-src="https://randomuser.me/api/portraits/lego/{{student.slice(-1).codePointAt(0) % 10}}.jpg" style="width:75px;height:75px" alt="{{student}}" class="img-rounded">
             <p class="text-center">{{student}}</p>
           </div>
 

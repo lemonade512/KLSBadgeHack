@@ -1,63 +1,65 @@
 {
   "students": [
     {
-      "absences": [], 
-      "can_signin": true, 
-      "deleted": false, 
-      "can_signout": false, 
-      "in_class": false, 
+      "absences": [],
+      "can_signin": true,
+      "deleted": false,
+      "can_signout": false,
+      "in_class": false,
       "authorized": [
         "vishesh"
-      ], 
-      "id": "123513", 
-      "name": "bob"
-    }, 
+      ],
+      "id": "2557022896",
+      "name": "shivein"
+    },
     {
       "absences": [
         "2015-07-11"
-      ], 
-      "can_signin": true, 
-      "deleted": false, 
-      "can_signout": true, 
-      "in_class": false, 
+      ],
+      "can_signin": true,
+      "deleted": false,
+      "can_signout": true,
+      "in_class": false,
       "authorized": [
-        "vishesh"
-      ], 
-      "id": "123512", 
-      "name": "george"
+        "vishesh",
+        "phillip",
+        "james"
+      ],
+      "id": "908718380",
+      "name": "naisha"
     }
-  ], 
+  ],
   "users": [
     {
-      "deleted": false, 
-      "id": "111", 
-      "name": "phillip", 
+      "deleted": false,
+      "id": "111",
+      "name": "phillip",
       "permissions": []
-    }, 
+    },
     {
-      "deleted": false, 
-      "id": "123", 
-      "name": "vishesh", 
+      "deleted": false,
+      "id": "1326236826170401",
+      "name": "vishesh",
       "permissions": []
     }
-  ], 
+  ],
   "interactions": [
     {
-      "date": "2015-07-11", 
-      "time_in": "08:00:23", 
-      "time_out": "17:03:41", 
+      "date": "2015-07-11",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41",
       "student": "bob"
-    }, 
+    },
     {
-      "date": "2015-07-12", 
-      "time_in": "08:00:23", 
-      "time_out": "17:03:41", 
+      "date": "2015-07-12",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41",
       "student": "bob"
-    }, 
+    },
     {
-      "date": "2015-07-12", 
-      "time_in": "08:00:23", 
-      "time_out": "17:03:41", 
+      "date": "2015-07-12",
+      "time_in": "08:00:23",
+      "time_out": "17:03:41",
       "student": "george"
     }
   ]
